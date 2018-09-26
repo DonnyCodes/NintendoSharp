@@ -57,7 +57,10 @@ namespace NintendoSharp.BuiltIn
 
         static void SendToVJoy(ControllerState state, NintendoSpyWrapper.ControlStyle controlStyle)
         {
-            byte[] newInput = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,128,128,0,128,128,0};
+            byte[] newInput = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,128,128,128,128,128,128};
+            byte[] deadzones = { 5, 5, 5, 5, 5, 5 };
+            byte[] stickDefaults = {128,128,128,128,128,128};
+            int[] stickBytes = new int[6];
             if (controlStyle == NintendoSpyWrapper.ControlStyle.GameCube)
             {
                 newInput[1] = BoolToByte(state.Buttons["a"]);
@@ -72,12 +75,24 @@ namespace NintendoSharp.BuiltIn
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                newInput[17] = (byte)(128 + (state.Analogs["lstick_x"] * 128));
-                newInput[18] = (byte)(128 + (state.Analogs["lstick_y"] * 128));
-                newInput[19] = (byte)(state.Analogs["trig_l"] * 255);
-                newInput[20] = (byte)(128 + (state.Analogs["cstick_x"] * 128));
-                newInput[21] = (byte)(128 + (state.Analogs["cstick_y"] * 128));
-                newInput[22] = (byte)(state.Analogs["trig_r"] * 255);
+                stickBytes[0] = (byte)(state.Analogs["lstick_x"] * 127);
+                stickBytes[1] = (byte)(state.Analogs["lstick_y"] * 127);
+                stickBytes[2] = -(byte)(state.Analogs["trig_l"] * 127);
+                stickBytes[3] = (byte)(state.Analogs["cstick_x"] * 127);
+                stickBytes[4] = (byte)(state.Analogs["cstick_y"] * 127);
+                stickBytes[5] = (byte)(state.Analogs["trig_r"] * 127);
+
+                for (int i = 0; i < 6; i += 1)
+                {
+                    if (Math.Abs(stickBytes[i]) > deadzones[i])
+                    {
+                        newInput[i + 17] = (byte)(128 + stickBytes[i]);
+                    }
+                    else
+                    {
+                        newInput[i + 17] = stickDefaults[i];
+                    }
+                }
             }
             else if (controlStyle == NintendoSpyWrapper.ControlStyle.N64)
             {
@@ -90,13 +105,17 @@ namespace NintendoSharp.BuiltIn
                 newInput[9] = BoolToByte(state.Buttons["cup"]);
                 newInput[10] = BoolToByte(state.Buttons["cleft"]);
                 newInput[11] = BoolToByte(state.Buttons["cdown"]);
-                newInput[11] = BoolToByte(state.Buttons["cright"]);
+                newInput[12] = BoolToByte(state.Buttons["cright"]);
                 newInput[13] = BoolToByte(state.Buttons["up"]);
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                newInput[17] = (byte)(128 + state.Analogs["stick_x"] * 128);
-                newInput[18] = (byte)(128 + state.Analogs["stick_y"] * 128);
+                newInput[17] = (byte)((state.Analogs["stick_x"] * 127));
+                newInput[18] = (byte)((state.Analogs["stick_y"] * 127));
+                newInput[19] = (byte)(128);
+                newInput[20] = (byte)(128);
+                newInput[21] = (byte)(128);
+                newInput[22] = (byte)(128);
             }
             VJoyController.outputQueue.Enqueue(newInput);
         }

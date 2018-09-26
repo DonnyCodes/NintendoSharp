@@ -63,6 +63,26 @@ namespace NintendoSharp
             return -1;
         }
 
+        static bool[] GetDifferences(byte[] oldByte, byte[] newByte)
+        {
+            bool[] ret = new bool[23];
+            bool differences = false;
+            for (int i = 1; i < 23; i += 1)
+            {
+                if (oldByte[i] != newByte[i])
+                {
+                    ret[i] = true;
+                    differences = true;
+                }
+                else
+                {
+                    ret[i] = false;
+                }
+            }
+            ret[0] = differences;
+            return ret;
+        }
+
         static void vJoyLoop()
         {
             vJoy joystick;
@@ -113,6 +133,7 @@ namespace NintendoSharp
             bool AxisY = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_Y);
             bool AxisZ = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_Z);
             bool AxisRX = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RX);
+            bool AxisRY = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RY);
             bool AxisRZ = joystick.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RZ);
             // Get the number of buttons and POV Hat switchessupported by this vJoy device
             int nButtons = joystick.GetVJDButtonNumber(id);
@@ -125,18 +146,23 @@ namespace NintendoSharp
             AppController.logBuffer += String.Format("Numner of Continuous POVs\t{0}\n", ContPovNumber);
             AppController.logBuffer += String.Format("Numner of Descrete POVs\t\t{0}\n", DiscPovNumber);
             AppController.logBuffer += String.Format("Axis X\t\t{0}\n", AxisX ? "Yes" : "No");
-            AppController.logBuffer += String.Format("Axis Y\t\t{0}\n", AxisX ? "Yes" : "No");
-            AppController.logBuffer += String.Format("Axis Z\t\t{0}\n", AxisX ? "Yes" : "No");
+            AppController.logBuffer += String.Format("Axis Y\t\t{0}\n", AxisY ? "Yes" : "No");
+            AppController.logBuffer += String.Format("Axis Z\t\t{0}\n", AxisZ ? "Yes" : "No");
             AppController.logBuffer += String.Format("Axis Rx\t\t{0}\n", AxisRX ? "Yes" : "No");
+            AppController.logBuffer += String.Format("Axis Ry\t\t{0}\n", AxisRY ? "Yes" : "No");
             AppController.logBuffer += String.Format("Axis Rz\t\t{0}\n", AxisRZ ? "Yes" : "No");
 
             // Test if DLL matches the driver
             UInt32 DllVer = 0, DrvVer = 0;
             bool match = joystick.DriverMatch(ref DllVer, ref DrvVer);
             if (match)
+            {
                 AppController.logBuffer += String.Format("Version of Driver Matches DLL Version ({0:X})\n", DllVer);
+            }
             else
+            {
                 AppController.logBuffer += String.Format("Version of Driver ({0:X}) does NOT match DLL Version ({1:X})\n", DrvVer, DllVer);
+            }
 
 
             // Acquire the target
@@ -145,12 +171,24 @@ namespace NintendoSharp
                 AppController.logBuffer += String.Format("Failed to acquire vJoy device number {0}.\n", id);
                 return;
             }
-            else
-                AppController.logBuffer += String.Format("Acquired: vJoy device number {0}.\n", id);
+            AppController.logBuffer += String.Format("Acquired: vJoy device number {0}.\n", id);
             enabled = true;
-            long vjoyMax = 0;
-            joystick.GetVJDAxisMax(id, HID_USAGES.HID_USAGE_X, ref vjoyMax);
-            double mod = (vjoyMax / 255);
+            long[] vJoyAxismax = { 0, 0, 0, 0, 0, 0 };
+            double[] axisMod = { 0, 0, 0, 0, 0, 0 };
+            bool[] axisEnabled = { AxisX, AxisY, AxisZ, AxisRX, AxisRY, AxisRZ};
+            bool res;
+            HID_USAGES[] axiHIDs = { HID_USAGES.HID_USAGE_X, HID_USAGES.HID_USAGE_Y, HID_USAGES.HID_USAGE_Z, HID_USAGES.HID_USAGE_RX, HID_USAGES.HID_USAGE_RY, HID_USAGES.HID_USAGE_RZ };
+
+            for (int i = 0; i < 6; i += 1)
+            {
+                if (axisEnabled[i])
+                {
+                    res = joystick.GetVJDAxisMax(id, axiHIDs[i], ref vJoyAxismax[i]);
+                    axisMod[i] = vJoyAxismax[i] / 255;
+                    AppController.logBuffer += axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + " | Mod: " + axisMod[i].ToString() + Environment.NewLine;
+                }
+            }
+
             AppController.logBuffer += "Running....";
             while (enabled) //loop driver
             {
@@ -160,26 +198,66 @@ namespace NintendoSharp
                     {
                         byte[] command = (byte[])outputQueue.Dequeue();
                         byte cmdType = command[0];
+
                         if (cmdType == (byte)1) //send input
                         {
-                            for (uint i = 1; i <= 12; i += 1) //buttons
+                            bool[] buttons = new bool[12];
+                            byte[] pov = new byte[2];
+                            for (int i = 1; i <= 12; i += 1)
                             {
-                                bool btn = false;
                                 if (command[i] == 1)
                                 {
-                                    btn = true;
+                                    buttons[i - 1] = true;
                                 }
-                                joystick.SetBtn(btn, id, i);
+                                else
+                                {
+                                    buttons[i - 1] = false;
+                                }
                             }
 
-                            joystick.SetDiscPov(ButtonsToPov(command[13], command[14], command[15], command[16]), 1,1);
+                            if (command[13] == 1)
+                            {
+                                pov[0] = 0;
+                            }
+                            else if (command[15] == 1)
+                            {
+                                pov[0] = 2;
+                            }
+                            else
+                            {
+                                pov[0] = 4;
+                            }
 
-                            joystick.SetAxis(Convert.ToInt32(command[17] * mod), 1, HID_USAGES.HID_USAGE_X);
-                            joystick.SetAxis(Convert.ToInt32(command[18] * mod), 1, HID_USAGES.HID_USAGE_Y);
-                            joystick.SetAxis(Convert.ToInt32(command[19] * mod), 1, HID_USAGES.HID_USAGE_Z);
-                            joystick.SetAxis(Convert.ToInt32(command[20] * mod), 1, HID_USAGES.HID_USAGE_RX);
-                            joystick.SetAxis(Convert.ToInt32(command[21] * mod), 1, HID_USAGES.HID_USAGE_RY);
-                            joystick.SetAxis(Convert.ToInt32(command[22] * mod), 1, HID_USAGES.HID_USAGE_RZ);
+                            if (command[14] == 1)
+                            {
+                                pov[1] = 3;
+                            }
+                            else if (command[16] == 1)
+                            {
+                                pov[1] = 1;
+                            }
+                            else
+                            {
+                                pov[1] = 4;
+                            }
+
+                            iReport.bHats = (uint)(4 << 12) | (uint)(4 << 8) | (uint)(pov[1] << 4) | (uint)pov[0];
+
+                            BitArray arr = new BitArray(buttons);
+                            int[] data = new int[4];
+                            arr.CopyTo(data, 0);
+                            iReport.Buttons = (uint)data[0];
+
+                            iReport.bDevice = (byte)1;
+                            iReport.AxisX = (int)(command[17] * axisMod[0]);
+                            iReport.AxisY = (int)(command[18] * axisMod[1]);
+                            iReport.AxisZ = (int)(command[19] * axisMod[2]);
+                            iReport.AxisXRot = (int)(command[20] * axisMod[3]);
+                            iReport.AxisYRot = (int)(command[21] * axisMod[4]);
+                            iReport.AxisZRot = (int)(command[22] * axisMod[5]);
+                            joystick.UpdateVJD(1, ref iReport);
+                            Thread.Sleep(1);
+                            //AppController.logBuffer += "Update.";
                         }
                         else if (cmdType == (byte)2)
                         {
