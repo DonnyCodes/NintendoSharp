@@ -110,8 +110,8 @@ namespace NintendoSharp.BuiltIn
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                newInput[17] = (byte)((state.Analogs["stick_x"] * 127));
-                newInput[18] = (byte)((state.Analogs["stick_y"] * 127));
+                newInput[17] = (byte)(128 + (state.Analogs["stick_x"] * 63));
+                newInput[18] = (byte)(128 + (state.Analogs["stick_y"] * 63));
                 newInput[19] = (byte)(128);
                 newInput[20] = (byte)(128);
                 newInput[21] = (byte)(128);
