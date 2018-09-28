@@ -25,4 +25,4 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 -A script engine that you can use to make scripts for NintendoSharp, allowing you to create custom programs.
 
-<b>TLDR:</b> Soon you can use it to get good at speedrunning.
+<b>TLDR:</b> Soon you can use it to git gud at speedrunning.
