@@ -4,7 +4,7 @@ A C# library and Loader for writing programs to interface with Nintendo products
 It uses a modified version of NicoHood's "Nintendo" library (https://github.com/NicoHood/Nintendo) to interact with a console's controller port over digital I/O pins. If you want to emulate a Wii Remote or Wii U Gamepad into your Wii/WiiU, a Bluetooth card is required in your PC (USB Bluetooth cards work too).
 
 
-What it can do:
+<b>What it can do:</b>
 
 -Re-Direct the feed from your NintendoSpy-Based input display for use as a PC gamepad. 2MS max responce time!
 
@@ -17,7 +17,7 @@ What it can do:
 --Record your input and export it as an Emulator TAS.
 
 
-What it will do soon:
+<b>What it will do soon:</b>
 
 -Allow people to practice learning "tricks" for their favorite games by loading TAS saves of perfect trick inputs and compairing them against your input in real time. Then you can see exactly what you did wrong after each try!
 
