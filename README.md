@@ -6,9 +6,9 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 <b>What it can do:</b>
 
--Re-Direct the feed from your NintendoSpy-Based input display for use as a PC gamepad. 2MS max responce time!
+-Re-Direct the feed from your NintendoSpy-Based input display for use as a PC gamepad. 2MS max response time!
 
--Re-Direct the feed from your Nintendo Controllers to their consoles and other consoles. 1MS max responce time!
+-Re-Direct the feed from your Nintendo Controllers to their consoles and other consoles. 1MS max response time!
 
 ^While doing that, it can also:
 
