@@ -156,7 +156,8 @@ namespace NintendoSharp.UI
 
         private void buttonProgramGUI_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Just Press \"Start\" and use the \"vjoy\" input in your game/emulator.");
+            //MessageBox.Show("Just Press \"Start\" and use the \"vjoy\" input in your game/emulator.");
+            BuiltIn.vJoy_Emu.OnGUI();
         }
 
         private void buttonProgramStart_Click(object sender, EventArgs e)

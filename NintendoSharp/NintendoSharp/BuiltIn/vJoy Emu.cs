@@ -13,6 +13,7 @@ namespace NintendoSharp.BuiltIn
     {
         static Thread emuThread;
         static volatile bool enabled;
+        public static vJoyEmuGUI gui = new vJoyEmuGUI();
 
         public static void Start()
         {
@@ -110,12 +111,28 @@ namespace NintendoSharp.BuiltIn
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                newInput[17] = (byte)(128 + (state.Analogs["stick_x"] * 63));
-                newInput[18] = (byte)(128 + (state.Analogs["stick_y"] * 63));
+                stickBytes[0] = (byte)(state.Analogs["stick_x"] * 64);
+                stickBytes[1] = (byte)(state.Analogs["stick_y"] * 64);
                 newInput[19] = (byte)(128);
                 newInput[20] = (byte)(128);
                 newInput[21] = (byte)(128);
                 newInput[22] = (byte)(128);
+                if ((Math.Abs(stickBytes[0]) * 2) > deadzones[0])
+                {
+                    newInput[17] = (byte)(128 + stickBytes[0]);
+                }
+                else
+                {
+                    newInput[17] = stickDefaults[0];
+                }
+                if ((Math.Abs(stickBytes[1]) * 2) > deadzones[1])
+                {
+                    newInput[18] = (byte)(128 + stickBytes[1]);
+                }
+                else
+                {
+                    newInput[18] = stickDefaults[1];
+                }
             }
             VJoyController.outputQueue.Enqueue(newInput);
         }
@@ -128,7 +145,7 @@ namespace NintendoSharp.BuiltIn
 
         public static void OnGUI()
         {
-
+            gui.Show();
         }
     }
 }
