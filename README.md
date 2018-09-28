@@ -19,6 +19,6 @@ What it can do:
 
 What it will do soon:
 
--Allow people to practice learning "tricks" for their favorite games loading TAS saves of perfect trick inputs and compairing them against your input in real time. Then you can see exactly what you did wrong in real time!
+-Allow people to practice learning "tricks" for their favorite games by loading TAS saves of perfect trick inputs and compairing them against your input in real time. Then you can see exactly what you did wrong after each try!
 
 -A script engine that you can use to make scripts for NintendoSharp, allowing you to create custom programs.
