@@ -24,3 +24,5 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 -Allow people to practice learning "tricks" for their favorite games by loading TAS saves of perfect trick inputs and compairing them against your input in real time. Then you can see exactly what you did wrong after each try!
 
 -A script engine that you can use to make scripts for NintendoSharp, allowing you to create custom programs.
+
+<b>TLDR:</b> Soon you can use it to get good at speedrunning.
