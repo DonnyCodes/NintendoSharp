@@ -16,6 +16,8 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 --Record your input and export it as an Emulator TAS.
 
+<b>TLDR:</b> Use any Nintendo Controller on any Nintendo console, or as a PC gamepad.
+
 
 <b>What it will do soon:</b>
 
