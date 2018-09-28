@@ -17,7 +17,7 @@ namespace NintendoSharp.BuiltIn
 
         public static void Start()
         {
-            AppController.Log("Starting vJoy Sender.", Constants.Enums.LogMessageType.Basic);
+            AppController.Log("App: Starting vJoy Sender.", Constants.Enums.LogMessageType.Basic);
             emuThread = new Thread(ThreadLoop);
             NintendoSpyWrapper.StartListening();
             VJoyController.StartVjoyThread();
@@ -26,7 +26,7 @@ namespace NintendoSharp.BuiltIn
 
         public static void ThreadLoop()
         {
-            AppController.logBuffer += "vJoy Sender Started." + Environment.NewLine;
+            AppController.logBuffer += "App: vJoy Sender Started." + Environment.NewLine;
             enabled = true;
             ControllerState lastState = null;
             Thread.Sleep(100);
@@ -41,7 +41,7 @@ namespace NintendoSharp.BuiltIn
                     //AppController.logBuffer = "Nintendo Spy:\n" + thisState.ToString() + Environment.NewLine;
                 }
             }
-            AppController.logBuffer += "vJoy Sender Stopped." + Environment.NewLine;
+            AppController.logBuffer += "App: vJoy Sender Stopped." + Environment.NewLine;
         }
 
         public static byte BoolToByte(bool boolean)
@@ -111,13 +111,13 @@ namespace NintendoSharp.BuiltIn
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                stickBytes[0] = (byte)(state.Analogs["stick_x"] * 64);
-                stickBytes[1] = (byte)(state.Analogs["stick_y"] * 64);
+                stickBytes[0] = (byte)(state.Analogs["stick_x"] * 128);
+                stickBytes[1] = (byte)(state.Analogs["stick_y"] * 128);
                 newInput[19] = (byte)(128);
                 newInput[20] = (byte)(128);
                 newInput[21] = (byte)(128);
                 newInput[22] = (byte)(128);
-                if ((Math.Abs(stickBytes[0]) * 2) > deadzones[0])
+                if (Math.Abs(stickBytes[0]) > deadzones[0])
                 {
                     newInput[17] = (byte)(128 + stickBytes[0]);
                 }
@@ -125,7 +125,7 @@ namespace NintendoSharp.BuiltIn
                 {
                     newInput[17] = stickDefaults[0];
                 }
-                if ((Math.Abs(stickBytes[1]) * 2) > deadzones[1])
+                if (Math.Abs(stickBytes[1]) > deadzones[1])
                 {
                     newInput[18] = (byte)(128 + stickBytes[1]);
                 }
@@ -139,7 +139,7 @@ namespace NintendoSharp.BuiltIn
 
         public static void Stop()
         {
-            AppController.Log("Stopping vJoy Sender.", Constants.Enums.LogMessageType.Basic);
+            AppController.Log("App: Stopping vJoy Sender.", Constants.Enums.LogMessageType.Basic);
             enabled = false;
         }
 

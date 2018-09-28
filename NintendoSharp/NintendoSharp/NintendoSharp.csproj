@@ -162,6 +162,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BuiltIn\InputSender\" />
     <Folder Include="Control\" />
   </ItemGroup>
   <ItemGroup>

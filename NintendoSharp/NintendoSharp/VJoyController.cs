@@ -15,6 +15,8 @@ namespace NintendoSharp
         public static Queue outputQueue; //to vjoy
         public static volatile uint controllerID = 1;
         public static volatile bool enabled = false;
+        public static volatile bool analogSettingsUpdateQueued = false;
+        public static volatile double[] newAnalogMods = { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
 
         public static void StartVjoyThread()
         {
@@ -94,37 +96,37 @@ namespace NintendoSharp
 
             if (id <= 0 || id > 16)
             {
-                AppController.logBuffer += String.Format("Illegal device ID {0}\nExit!", id);
+                AppController.logBuffer += String.Format("vJoy: Illegal device ID {0}\nExit!", id);
                 return;
             }
 
             // Get the driver attributes (Vendor ID, Product ID, Version Number)
             if (!joystick.vJoyEnabled())
             {
-                AppController.logBuffer += String.Format("vJoy driver not enabled: Failed Getting vJoy attributes.\n");
+                AppController.logBuffer += String.Format("vJoy: driver not enabled, Failed Getting vJoy attributes.\n");
                 return;
             }
             else
-                AppController.logBuffer += String.Format("Vendor: {0}\nProduct :{1}\nVersion Number:{2}\n", joystick.GetvJoyManufacturerString(), joystick.GetvJoyProductString(), joystick.GetvJoySerialNumberString());
+                AppController.logBuffer += String.Format("vJoy: Vendor: {0}\nProduct :{1}\nVersion Number:{2}\n", joystick.GetvJoyManufacturerString(), joystick.GetvJoyProductString(), joystick.GetvJoySerialNumberString());
 
             // Get the state of the requested device
             VjdStat status = joystick.GetVJDStatus(id);
             switch (status)
             {
                 case VjdStat.VJD_STAT_OWN:
-                    AppController.logBuffer += String.Format("vJoy Device {0} is already owned by this feeder\n", id);
+                    AppController.logBuffer += String.Format("vJoy: Device {0} is already owned by this feeder\n", id);
                     break;
                 case VjdStat.VJD_STAT_FREE:
-                    AppController.logBuffer += String.Format("vJoy Device {0} is free\n", id);
+                    AppController.logBuffer += String.Format("vJoy: Device {0} is free\n", id);
                     break;
                 case VjdStat.VJD_STAT_BUSY:
-                    AppController.logBuffer += String.Format("vJoy Device {0} is already owned by another feeder\nCannot continue\n", id);
+                    AppController.logBuffer += String.Format("vJoy: Device {0} is already owned by another feeder\nCannot continue\n", id);
                     return;
                 case VjdStat.VJD_STAT_MISS:
-                    AppController.logBuffer += String.Format("vJoy Device {0} is not installed or disabled\nCannot continue\n", id);
+                    AppController.logBuffer += String.Format("vJoy: Device {0} is not installed or disabled\nCannot continue\n", id);
                     return;
                 default:
-                    AppController.logBuffer += String.Format("vJoy Device {0} general error\nCannot continue\n", id);
+                    AppController.logBuffer += String.Format("vJoy: Device {0} general error\nCannot continue\n", id);
                     return;
             };
 
@@ -141,42 +143,43 @@ namespace NintendoSharp
             int DiscPovNumber = joystick.GetVJDDiscPovNumber(id);
 
             // Print results
-            AppController.logBuffer += String.Format("\nvJoy Device {0} capabilities:\n", id);
-            AppController.logBuffer += String.Format("Numner of buttons\t\t{0}\n", nButtons);
-            AppController.logBuffer += String.Format("Numner of Continuous POVs\t{0}\n", ContPovNumber);
-            AppController.logBuffer += String.Format("Numner of Descrete POVs\t\t{0}\n", DiscPovNumber);
-            AppController.logBuffer += String.Format("Axis X\t\t{0}\n", AxisX ? "Yes" : "No");
-            AppController.logBuffer += String.Format("Axis Y\t\t{0}\n", AxisY ? "Yes" : "No");
-            AppController.logBuffer += String.Format("Axis Z\t\t{0}\n", AxisZ ? "Yes" : "No");
-            AppController.logBuffer += String.Format("Axis Rx\t\t{0}\n", AxisRX ? "Yes" : "No");
-            AppController.logBuffer += String.Format("Axis Ry\t\t{0}\n", AxisRY ? "Yes" : "No");
-            AppController.logBuffer += String.Format("Axis Rz\t\t{0}\n", AxisRZ ? "Yes" : "No");
+            AppController.logBuffer += String.Format("vJoy: \nvJoy Device {0} capabilities:\n", id);
+            AppController.logBuffer += String.Format("vJoy: Numner of buttons\t\t{0}\n", nButtons);
+            AppController.logBuffer += String.Format("vJoy: Numner of Continuous POVs\t{0}\n", ContPovNumber);
+            AppController.logBuffer += String.Format("vJoy: Numner of Descrete POVs\t\t{0}\n", DiscPovNumber);
+            AppController.logBuffer += String.Format("vJoy: Axis X\t\t{0}\n", AxisX ? "Yes" : "No");
+            AppController.logBuffer += String.Format("vJoy: Axis Y\t\t{0}\n", AxisY ? "Yes" : "No");
+            AppController.logBuffer += String.Format("vJoy: Axis Z\t\t{0}\n", AxisZ ? "Yes" : "No");
+            AppController.logBuffer += String.Format("vJoy: Axis Rx\t\t{0}\n", AxisRX ? "Yes" : "No");
+            AppController.logBuffer += String.Format("vJoy: Axis Ry\t\t{0}\n", AxisRY ? "Yes" : "No");
+            AppController.logBuffer += String.Format("vJoy: Axis Rz\t\t{0}\n", AxisRZ ? "Yes" : "No");
 
             // Test if DLL matches the driver
             UInt32 DllVer = 0, DrvVer = 0;
             bool match = joystick.DriverMatch(ref DllVer, ref DrvVer);
             if (match)
             {
-                AppController.logBuffer += String.Format("Version of Driver Matches DLL Version ({0:X})\n", DllVer);
+                AppController.logBuffer += String.Format("vJoy: Version of Driver Matches DLL Version ({0:X})\n", DllVer);
             }
             else
             {
-                AppController.logBuffer += String.Format("Version of Driver ({0:X}) does NOT match DLL Version ({1:X})\n", DrvVer, DllVer);
+                AppController.logBuffer += String.Format("vJoy: Version of Driver ({0:X}) does NOT match DLL Version ({1:X})\n", DrvVer, DllVer);
             }
 
 
             // Acquire the target
             if ((status == VjdStat.VJD_STAT_OWN) || ((status == VjdStat.VJD_STAT_FREE) && (!joystick.AcquireVJD(id))))
             {
-                AppController.logBuffer += String.Format("Failed to acquire vJoy device number {0}.\n", id);
+                AppController.logBuffer += String.Format("vJoy: Failed to acquire device number {0}.\n", id);
                 return;
             }
-            AppController.logBuffer += String.Format("Acquired: vJoy device number {0}.\n", id);
+            AppController.logBuffer += String.Format("vJoy: Acquired vJoy device number {0}.\n", id);
             enabled = true;
             long[] vJoyAxismax = { 0, 0, 0, 0, 0, 0 };
             double[] axisMod = { 0, 0, 0, 0, 0, 0 };
             bool[] axisEnabled = { AxisX, AxisY, AxisZ, AxisRX, AxisRY, AxisRZ};
             bool res;
+            double[] stickMods = { 1.00, 1.00, 1.00, 1.00 ,1.00, 1.00 };
             HID_USAGES[] axiHIDs = { HID_USAGES.HID_USAGE_X, HID_USAGES.HID_USAGE_Y, HID_USAGES.HID_USAGE_Z, HID_USAGES.HID_USAGE_RX, HID_USAGES.HID_USAGE_RY, HID_USAGES.HID_USAGE_RZ };
 
             for (int i = 0; i < 6; i += 1)
@@ -185,15 +188,25 @@ namespace NintendoSharp
                 {
                     res = joystick.GetVJDAxisMax(id, axiHIDs[i], ref vJoyAxismax[i]);
                     axisMod[i] = vJoyAxismax[i] / 255;
-                    AppController.logBuffer += axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + " | Mod: " + axisMod[i].ToString() + Environment.NewLine;
+                    AppController.logBuffer += "vJoy:" + axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + " | Mod: " + axisMod[i].ToString() + Environment.NewLine;
                 }
             }
 
-            AppController.logBuffer += "Running....";
+            AppController.logBuffer += "vJoy: Running....";
             while (enabled) //loop driver
             {
                 try
                 {
+                    if (analogSettingsUpdateQueued)
+                    {
+                        analogSettingsUpdateQueued = false;
+                        for (int i = 0; i < 6; i += 1)
+                        {
+                            stickMods[i] = newAnalogMods[i];
+                        }
+                        AppController.logBuffer += "vJoy: Updated Analog modifiers to:\n" + "X:" + stickMods[0].ToString() + ", Y:" + stickMods[1].ToString() + ", Z:" + stickMods[2].ToString() + ", rX:" + stickMods[3].ToString() + ", rY:" + stickMods[4].ToString() + ", rZ:" + stickMods[5].ToString() + Environment.NewLine;
+                    }
+
                     if (outputQueue.Count != 0) //new command
                     {
                         byte[] command = (byte[])outputQueue.Dequeue();
@@ -248,13 +261,28 @@ namespace NintendoSharp
                             arr.CopyTo(data, 0);
                             iReport.Buttons = (uint)data[0];
 
+                            int[] newAxi = {0,0,0,0,0,0};
+                            for (int i = 0; i < 6; i += 1)
+                            {
+                                long tmpVal = Convert.ToInt64(command[i + 17] * axisMod[i] * stickMods[i]);
+                                if (tmpVal > vJoyAxismax[i]) //no overflow
+                                {
+                                    tmpVal = vJoyAxismax[i];
+                                }
+                                if (tmpVal < 0) //no overflow
+                                {
+                                    tmpVal = 0;
+                                }
+                                newAxi[i] = Convert.ToInt32(tmpVal);
+                            }
+
                             iReport.bDevice = (byte)1;
-                            iReport.AxisX = (int)(command[17] * axisMod[0]);
-                            iReport.AxisY = (int)(command[18] * axisMod[1]);
-                            iReport.AxisZ = (int)(command[19] * axisMod[2]);
-                            iReport.AxisXRot = (int)(command[20] * axisMod[3]);
-                            iReport.AxisYRot = (int)(command[21] * axisMod[4]);
-                            iReport.AxisZRot = (int)(command[22] * axisMod[5]);
+                            iReport.AxisX = newAxi[0];
+                            iReport.AxisY = newAxi[1];
+                            iReport.AxisZ = newAxi[2];
+                            iReport.AxisXRot = newAxi[3];
+                            iReport.AxisYRot = newAxi[4];
+                            iReport.AxisZRot = newAxi[5];
                             joystick.UpdateVJD(1, ref iReport);
                             Thread.Sleep(1);
                             //AppController.logBuffer += "Update.";
@@ -262,18 +290,18 @@ namespace NintendoSharp
                         else if (cmdType == (byte)2)
                         {
                             joystick.ResetVJD(id);
-                            AppController.logBuffer += "vJoy Reset." + Environment.NewLine;
+                            AppController.logBuffer += "vJoy: Reset." + Environment.NewLine;
                         }
                     }
                 }
                 catch(Exception exc)
                 {
-                    AppController.logBuffer += "Vjoy Error:\n" + exc.ToString();
+                    AppController.logBuffer += "vjoy: Error:\n" + exc.ToString();
                 }
             }
             joystick.ResetVJD(id);
             joystick.RelinquishVJD(1);
-            AppController.logBuffer += "vJoy Thread Ended." + Environment.NewLine;
+            AppController.logBuffer += "vJoy: Thread Ended." + Environment.NewLine;
         }
     }
 }

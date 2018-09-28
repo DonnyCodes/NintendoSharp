@@ -59,6 +59,9 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzZ)).BeginInit();
@@ -241,7 +244,7 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(79, 157);
+            this.buttonSave.Location = new System.Drawing.Point(79, 220);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(215, 32);
             this.buttonSave.TabIndex = 13;
@@ -251,7 +254,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(12, 157);
+            this.buttonCancel.Location = new System.Drawing.Point(12, 220);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(61, 32);
             this.buttonCancel.TabIndex = 14;
@@ -325,6 +328,7 @@
             // 
             // numericUpDownModRZ
             // 
+            this.numericUpDownModRZ.DecimalPlaces = 2;
             this.numericUpDownModRZ.Increment = new decimal(new int[] {
             1,
             0,
@@ -332,10 +336,10 @@
             131072});
             this.numericUpDownModRZ.Location = new System.Drawing.Point(252, 117);
             this.numericUpDownModRZ.Maximum = new decimal(new int[] {
-            2,
+            25,
             0,
             0,
-            0});
+            65536});
             this.numericUpDownModRZ.Name = "numericUpDownModRZ";
             this.numericUpDownModRZ.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownModRZ.TabIndex = 20;
@@ -347,6 +351,7 @@
             // 
             // numericUpDownModRY
             // 
+            this.numericUpDownModRY.DecimalPlaces = 2;
             this.numericUpDownModRY.Increment = new decimal(new int[] {
             1,
             0,
@@ -354,10 +359,10 @@
             131072});
             this.numericUpDownModRY.Location = new System.Drawing.Point(204, 117);
             this.numericUpDownModRY.Maximum = new decimal(new int[] {
-            2,
+            25,
             0,
             0,
-            0});
+            65536});
             this.numericUpDownModRY.Name = "numericUpDownModRY";
             this.numericUpDownModRY.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownModRY.TabIndex = 19;
@@ -369,6 +374,7 @@
             // 
             // numericUpDownModRX
             // 
+            this.numericUpDownModRX.DecimalPlaces = 2;
             this.numericUpDownModRX.Increment = new decimal(new int[] {
             1,
             0,
@@ -376,10 +382,10 @@
             131072});
             this.numericUpDownModRX.Location = new System.Drawing.Point(156, 117);
             this.numericUpDownModRX.Maximum = new decimal(new int[] {
-            2,
+            25,
             0,
             0,
-            0});
+            65536});
             this.numericUpDownModRX.Name = "numericUpDownModRX";
             this.numericUpDownModRX.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownModRX.TabIndex = 18;
@@ -391,6 +397,7 @@
             // 
             // numericUpDownModZ
             // 
+            this.numericUpDownModZ.DecimalPlaces = 2;
             this.numericUpDownModZ.Increment = new decimal(new int[] {
             1,
             0,
@@ -398,10 +405,10 @@
             131072});
             this.numericUpDownModZ.Location = new System.Drawing.Point(108, 117);
             this.numericUpDownModZ.Maximum = new decimal(new int[] {
-            2,
+            25,
             0,
             0,
-            0});
+            65536});
             this.numericUpDownModZ.Name = "numericUpDownModZ";
             this.numericUpDownModZ.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownModZ.TabIndex = 17;
@@ -413,6 +420,7 @@
             // 
             // numericUpDownModY
             // 
+            this.numericUpDownModY.DecimalPlaces = 2;
             this.numericUpDownModY.Increment = new decimal(new int[] {
             1,
             0,
@@ -420,10 +428,10 @@
             131072});
             this.numericUpDownModY.Location = new System.Drawing.Point(60, 117);
             this.numericUpDownModY.Maximum = new decimal(new int[] {
-            2,
+            25,
             0,
             0,
-            0});
+            65536});
             this.numericUpDownModY.Name = "numericUpDownModY";
             this.numericUpDownModY.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownModY.TabIndex = 16;
@@ -435,6 +443,7 @@
             // 
             // numericUpDownModX
             // 
+            this.numericUpDownModX.DecimalPlaces = 2;
             this.numericUpDownModX.Increment = new decimal(new int[] {
             1,
             0,
@@ -442,10 +451,10 @@
             131072});
             this.numericUpDownModX.Location = new System.Drawing.Point(12, 117);
             this.numericUpDownModX.Maximum = new decimal(new int[] {
-            2,
+            25,
             0,
             0,
-            0});
+            65536});
             this.numericUpDownModX.Name = "numericUpDownModX";
             this.numericUpDownModX.Size = new System.Drawing.Size(42, 20);
             this.numericUpDownModX.TabIndex = 15;
@@ -466,7 +475,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.panel2.Location = new System.Drawing.Point(5, 147);
+            this.panel2.Location = new System.Drawing.Point(6, 143);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(300, 2);
             this.panel2.TabIndex = 29;
@@ -476,17 +485,50 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.Red;
-            this.label15.Location = new System.Drawing.Point(12, 3);
+            this.label15.Location = new System.Drawing.Point(20, 5);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(281, 13);
+            this.label15.Size = new System.Drawing.Size(260, 13);
             this.label15.TabIndex = 30;
-            this.label15.Text = "Coming Soon..... This Currently Does NOTHING.";
+            this.label15.Text = "Deadzone\'s don\'t work yet. But modifiers do!";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.label16.Location = new System.Drawing.Point(93, 88);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(166, 13);
+            this.label16.TabIndex = 31;
+            this.label16.Text = "(axisOutput = axisValue * modifier)";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.label17.Location = new System.Drawing.Point(9, 167);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(268, 26);
+            this.label17.TabIndex = 32;
+            this.label17.Text = "N64: Stick -> X,Y\r\nGCN: L_Stick -> X,Y | C_Stick -> rX,rY | Triggers -> Z,rZ";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(9, 148);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(85, 13);
+            this.label18.TabIndex = 33;
+            this.label18.Text = "Mapping Info:";
             // 
             // vJoyEmuGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(311, 201);
+            this.ClientSize = new System.Drawing.Size(311, 264);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -523,6 +565,7 @@
             this.Name = "vJoyEmuGUI";
             this.Text = "vJoy Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.vJoyEmuGUI_FormClosing);
+            this.Shown += new System.EventHandler(this.vJoyEmuGUI_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzZ)).EndInit();
@@ -573,5 +616,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
     }
 }

@@ -32,7 +32,7 @@ namespace NintendoSharp.NintendoSpyW
         {
             string portStr = AppController.mainForm.comboBoxPorts.GetItemText(AppController.mainForm.comboBoxPorts.SelectedItem);
             string consoleStr = AppController.mainForm.comboBoxControllerType.GetItemText(AppController.mainForm.comboBoxControllerType.SelectedItem);
-            AppController.Log("Starting NintendoSpy Wrapper on: " + portStr, Constants.Enums.LogMessageType.Basic);
+            AppController.Log("NintendoSpy: Starting wrapper on: " + portStr, Constants.Enums.LogMessageType.Basic);
             try
             {
                 if (consoleStr.StartsWith("NES"))
@@ -58,10 +58,11 @@ namespace NintendoSharp.NintendoSpyW
                 _reader = source.BuildReader(portStr);
                 _reader.ControllerStateChanged += reader_ControllerStateChanged;
                 _reader.ControllerDisconnected += reader_ControllerDisconnected;
+                AppController.Log("NintendoSpy: Wrapper Started.", Constants.Enums.LogMessageType.Basic);
             }
             catch (Exception exc)
             {
-                AppController.Log("NintendoSpy Error:\n" + exc.ToString(), Constants.Enums.LogMessageType.Error);
+                AppController.Log("NintendoSpy: Error:\n" + exc.ToString(), Constants.Enums.LogMessageType.Error);
             }
         }
     }
