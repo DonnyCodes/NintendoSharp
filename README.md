@@ -12,7 +12,7 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 -Display your input on your PC (for streamers).
 
-<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play PC games with any NintendoSpy-compatible input display. It can also record and display your input in real-time.
+<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play PC games with any NintendoSpy-compatible input display. It can also display your input in real-time.
 
 
 <b>What it will do soon:</b>
