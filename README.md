@@ -16,7 +16,7 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 --Record your input and export it as an Emulator TAS.
 
-<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play games with your input display if you use NintendoSpy.
+<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play PC games with your input display if you use NintendoSpy.
 
 
 <b>What it will do soon:</b>
