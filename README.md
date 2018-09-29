@@ -6,9 +6,9 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 <b>What it can do:</b>
 
--Re-Direct the feed from your NintendoSpy-Based input display for use as a PC Gamepad. 2MS max response time!
+-Redirect the feed from any NintendoSpy-Based input display(https://github.com/jaburns/NintendoSpy) for use as a PC Gamepad. 2MS max response time!
 
--Direct the feed from your Nintendo Controllers through an Arduino board, and to their consoles and other consoles. Or use them as a PC Gamepad. 1MS max response time!
+-Direct the feed from any Nintendo Controller through an Arduino board, and to their consoles or other consoles. You can also use them as a PC Gamepad. 1MS max response time!
 
 ^While doing that, it can also:
 
@@ -16,7 +16,7 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 --Record your input and export it as an Emulator TAS.
 
-<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play PC games with your input display if you use NintendoSpy.
+<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play PC games with any NintendoSpy-compatible input display.
 
 
 <b>What it will do soon:</b>
