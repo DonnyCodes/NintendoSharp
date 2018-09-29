@@ -10,19 +10,15 @@ It uses a modified version of NicoHood's "Nintendo" library (https://github.com/
 
 -Direct the feed from any Nintendo Controller through an Arduino board, and to their consoles or other consoles. You can also use them as a PC Gamepad. 1MS max response time!
 
-^While doing that, it can also:
+-Display your input on your PC (for streamers).
 
---Display your input on your PC.
-
---Record your input and export it as an Emulator TAS.
-
-<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play PC games with any NintendoSpy-compatible input display.
+<b>TLDR:</b> It lets you use any Nintendo Controller on any Nintendo console, or as a PC gamepad. It also lets you play PC games with any NintendoSpy-compatible input display. It can also record and display your input in real-time.
 
 
 <b>What it will do soon:</b>
 
+-Allow people to record their input, and export it as an Emulator TAS. So people can playback their recordings in an emulator.
+
 -Allow people to practice learning "tricks" for their favorite games by loading TAS saves of perfect trick inputs and compairing them against your input in real time. Then you can see exactly what you did wrong after each try!
 
--A script engine that you can use to make scripts for NintendoSharp, allowing you to create custom programs.
-
-<b>TLDR:</b> Soon you can use it to git gud at speedrunning.
+<b>TLDR:</b> Soon you can use it to git gud at speedrunning, and show off tricks/runs to friends in an emulator.
