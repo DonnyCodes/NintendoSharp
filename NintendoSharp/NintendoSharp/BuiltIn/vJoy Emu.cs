@@ -76,18 +76,18 @@ namespace NintendoSharp.BuiltIn
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                stickBytes[0] = (byte)(state.Analogs["lstick_x"] * 127);
-                stickBytes[1] = (byte)(state.Analogs["lstick_y"] * 127);
-                stickBytes[2] = -(byte)(state.Analogs["trig_l"] * 127);
-                stickBytes[3] = (byte)(state.Analogs["cstick_x"] * 127);
-                stickBytes[4] = (byte)(state.Analogs["cstick_y"] * 127);
-                stickBytes[5] = (byte)(state.Analogs["trig_r"] * 127);
+                stickBytes[0] = (byte)(state.Analogs["lstick_x"] * 128);
+                stickBytes[1] = (byte)(state.Analogs["lstick_y"] * 128);
+                stickBytes[2] = (byte)(state.Analogs["trig_l"] * 128);
+                stickBytes[3] = (byte)(state.Analogs["cstick_x"] * 128);
+                stickBytes[4] = (byte)(state.Analogs["cstick_y"] * 128);
+                stickBytes[5] = (byte)(state.Analogs["trig_r"] * 128);
 
                 for (int i = 0; i < 6; i += 1)
                 {
                     if (Math.Abs(stickBytes[i]) > deadzones[i])
                     {
-                        newInput[i + 17] = (byte)(128 + stickBytes[i]);
+                        newInput[i + 17] = (byte)(stickBytes[i]);
                     }
                     else
                     {
@@ -113,25 +113,25 @@ namespace NintendoSharp.BuiltIn
                 newInput[16] = BoolToByte(state.Buttons["right"]);
                 stickBytes[0] = (byte)(state.Analogs["stick_x"] * 128);
                 stickBytes[1] = (byte)(state.Analogs["stick_y"] * 128);
-                newInput[19] = (byte)(128);
-                newInput[20] = (byte)(128);
-                newInput[21] = (byte)(128);
-                newInput[22] = (byte)(128);
+                newInput[19] = (byte)0;
+                newInput[20] = (byte)0;
+                newInput[21] = (byte)0;
+                newInput[22] = (byte)0;
                 if (Math.Abs(stickBytes[0]) > deadzones[0])
                 {
-                    newInput[17] = (byte)(128 + stickBytes[0]);
+                    newInput[17] = (byte)(stickBytes[0]);
                 }
                 else
                 {
-                    newInput[17] = stickDefaults[0];
+                    newInput[17] = 0;
                 }
                 if (Math.Abs(stickBytes[1]) > deadzones[1])
                 {
-                    newInput[18] = (byte)(128 + stickBytes[1]);
+                    newInput[18] = (byte)(stickBytes[1]);
                 }
                 else
                 {
-                    newInput[18] = stickDefaults[1];
+                    newInput[18] = 0;
                 }
             }
             VJoyController.outputQueue.Enqueue(newInput);
@@ -146,6 +146,7 @@ namespace NintendoSharp.BuiltIn
         public static void OnGUI()
         {
             gui.Show();
+            gui.BringToFront();
         }
     }
 }

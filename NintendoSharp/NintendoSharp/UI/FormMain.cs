@@ -294,6 +294,7 @@ namespace NintendoSharp.UI
         private void buttonLog_Click(object sender, EventArgs e)
         {
             AppController.logForm.Show();
+            AppController.logForm.BringToFront();
         }
 
         private void labelClose_Click(object sender, EventArgs e)
@@ -373,6 +374,11 @@ namespace NintendoSharp.UI
             }
             comboBoxConsoleInput.Enabled = true;
             comboBoxConsoleInput.SelectedIndex = 0;
+        }
+
+        private void panelTop_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

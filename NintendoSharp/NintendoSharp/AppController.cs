@@ -17,7 +17,7 @@ namespace NintendoSharp
     public static class AppController
     {
         public static string[] builtinPrograms = {"Input Recorder", "Input Converter"};
-        public static string version = "0.1.9";
+        public static string version = "0.2.0";
 
         public static FormMain mainForm;
         public static FormLog logForm;

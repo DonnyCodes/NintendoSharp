@@ -77,6 +77,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppController.cs" />
+    <Compile Include="BuiltIn\InputSender\InputSenderGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BuiltIn\InputSender\InputSenderGUI.Designer.cs">
+      <DependentUpon>InputSenderGUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BuiltIn\InputSender\InputSenderSendForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BuiltIn\InputSender\InputSenderSendForm.Designer.cs">
+      <DependentUpon>InputSenderSendForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BuiltIn\InputSender\InputSender_Prog.cs" />
     <Compile Include="BuiltIn\vJoy Emu.cs" />
     <Compile Include="BuiltIn\vJoyEmuGUI.cs">
       <SubType>Form</SubType>
@@ -128,6 +141,12 @@
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="VJoyController.cs" />
+    <EmbeddedResource Include="BuiltIn\InputSender\InputSenderGUI.resx">
+      <DependentUpon>InputSenderGUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BuiltIn\InputSender\InputSenderSendForm.resx">
+      <DependentUpon>InputSenderSendForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BuiltIn\vJoyEmuGUI.resx">
       <DependentUpon>vJoyEmuGUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,7 +181,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BuiltIn\InputSender\" />
     <Folder Include="Control\" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +213,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="nsharp.ico" />
+    <None Include="Resources\GameCube.png" />
+    <None Include="Resources\N64.png" />
+    <None Include="Resources\SNES.png" />
+    <None Include="Resources\NES.png" />
     <None Include="Resources\vJoyInterface.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -17,6 +17,7 @@ namespace NintendoSharp
         public static volatile bool enabled = false;
         public static volatile bool analogSettingsUpdateQueued = false;
         public static volatile double[] newAnalogMods = { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
+        public static volatile int[] newDeadzones = {5,5,5,5,5,5};
 
         public static void StartVjoyThread()
         {
@@ -180,6 +181,7 @@ namespace NintendoSharp
             bool[] axisEnabled = { AxisX, AxisY, AxisZ, AxisRX, AxisRY, AxisRZ};
             bool res;
             double[] stickMods = { 1.00, 1.00, 1.00, 1.00 ,1.00, 1.00 };
+            int[] deadZones = { 5, 5, 5, 5, 5, 5 };
             HID_USAGES[] axiHIDs = { HID_USAGES.HID_USAGE_X, HID_USAGES.HID_USAGE_Y, HID_USAGES.HID_USAGE_Z, HID_USAGES.HID_USAGE_RX, HID_USAGES.HID_USAGE_RY, HID_USAGES.HID_USAGE_RZ };
 
             for (int i = 0; i < 6; i += 1)
@@ -188,7 +190,7 @@ namespace NintendoSharp
                 {
                     res = joystick.GetVJDAxisMax(id, axiHIDs[i], ref vJoyAxismax[i]);
                     axisMod[i] = vJoyAxismax[i] / 255;
-                    AppController.logBuffer += "vJoy:" + axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + " | Mod: " + axisMod[i].ToString() + Environment.NewLine;
+                    AppController.logBuffer += "vJoy: " + axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + " | Mod: " + axisMod[i].ToString() + Environment.NewLine;
                 }
             }
 
@@ -203,8 +205,10 @@ namespace NintendoSharp
                         for (int i = 0; i < 6; i += 1)
                         {
                             stickMods[i] = newAnalogMods[i];
+                            deadZones[i] = newDeadzones[i];
                         }
                         AppController.logBuffer += "vJoy: Updated Analog modifiers to:\n" + "X:" + stickMods[0].ToString() + ", Y:" + stickMods[1].ToString() + ", Z:" + stickMods[2].ToString() + ", rX:" + stickMods[3].ToString() + ", rY:" + stickMods[4].ToString() + ", rZ:" + stickMods[5].ToString() + Environment.NewLine;
+                        AppController.logBuffer += "vJoy: Updated Analog deadzones to:\n" + "X:" + deadZones[0].ToString() + ", Y:" + deadZones[1].ToString() + ", Z:" + deadZones[2].ToString() + ", rX:" + deadZones[3].ToString() + ", rY:" + deadZones[4].ToString() + ", rZ:" + deadZones[5].ToString() + Environment.NewLine;
                     }
 
                     if (outputQueue.Count != 0) //new command
@@ -262,18 +266,24 @@ namespace NintendoSharp
                             iReport.Buttons = (uint)data[0];
 
                             int[] newAxi = {0,0,0,0,0,0};
-                            for (int i = 0; i < 6; i += 1)
+                            for (int i = 0; i < 6; i += 1) //sticks
                             {
+                                int axisBase = Convert.ToInt32(vJoyAxismax[i] / 2);
                                 long tmpVal = Convert.ToInt64(command[i + 17] * axisMod[i] * stickMods[i]);
-                                if (tmpVal > vJoyAxismax[i]) //no overflow
-                                {
-                                    tmpVal = vJoyAxismax[i];
-                                }
-                                if (tmpVal < 0) //no overflow
+                                if (tmpVal < (deadZones[i] * axisMod[i]))
                                 {
                                     tmpVal = 0;
                                 }
-                                newAxi[i] = Convert.ToInt32(tmpVal);
+                                long newValue = axisBase + tmpVal;
+                                if (newValue > vJoyAxismax[i]) //no overflow
+                                {
+                                    newValue = vJoyAxismax[i];
+                                }
+                                if (newValue < 0) //no overflow
+                                {
+                                    newValue = 0;
+                                }
+                                newAxi[i] = Convert.ToInt32(newValue);
                             }
 
                             iReport.bDevice = (byte)1;

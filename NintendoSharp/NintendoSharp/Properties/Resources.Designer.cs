@@ -61,6 +61,36 @@ namespace NintendoSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GameCube {
+            get {
+                object obj = ResourceManager.GetObject("GameCube", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap N64 {
+            get {
+                object obj = ResourceManager.GetObject("N64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NES {
+            get {
+                object obj = ResourceManager.GetObject("NES", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon nico {
@@ -103,6 +133,16 @@ namespace NintendoSharp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SNES {
+            get {
+                object obj = ResourceManager.GetObject("SNES", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Stick1 {
             get {
                 object obj = ResourceManager.GetObject("Stick1", resourceCulture);
@@ -116,16 +156,6 @@ namespace NintendoSharp.Properties {
         internal static System.Drawing.Bitmap Stick2 {
             get {
                 object obj = ResourceManager.GetObject("Stick2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap StickImgA {
-            get {
-                object obj = ResourceManager.GetObject("StickImgA", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
