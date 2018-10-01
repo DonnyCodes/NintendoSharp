@@ -15,9 +15,6 @@ namespace NintendoSharp
         public static Queue outputQueue; //to vjoy
         public static volatile uint controllerID = 1;
         public static volatile bool enabled = false;
-        public static volatile bool analogSettingsUpdateQueued = false;
-        public static volatile double[] newAnalogMods = { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
-        public static volatile int[] newDeadzones = {5,5,5,5,5,5};
 
         public static void StartVjoyThread()
         {
@@ -35,8 +32,6 @@ namespace NintendoSharp
                 try
                 {
                     enabled = false;
-                    Thread.Sleep(25);
-                    vJoyThread.Abort();
                 }
                 catch (Exception exc)
                 {
@@ -177,11 +172,8 @@ namespace NintendoSharp
             AppController.logBuffer += String.Format("vJoy: Acquired vJoy device number {0}.\n", id);
             enabled = true;
             long[] vJoyAxismax = { 0, 0, 0, 0, 0, 0 };
-            double[] axisMod = { 0, 0, 0, 0, 0, 0 };
             bool[] axisEnabled = { AxisX, AxisY, AxisZ, AxisRX, AxisRY, AxisRZ};
             bool res;
-            double[] stickMods = { 1.00, 1.00, 1.00, 1.00 ,1.00, 1.00 };
-            int[] deadZones = { 5, 5, 5, 5, 5, 5 };
             HID_USAGES[] axiHIDs = { HID_USAGES.HID_USAGE_X, HID_USAGES.HID_USAGE_Y, HID_USAGES.HID_USAGE_Z, HID_USAGES.HID_USAGE_RX, HID_USAGES.HID_USAGE_RY, HID_USAGES.HID_USAGE_RZ };
 
             for (int i = 0; i < 6; i += 1)
@@ -189,34 +181,24 @@ namespace NintendoSharp
                 if (axisEnabled[i])
                 {
                     res = joystick.GetVJDAxisMax(id, axiHIDs[i], ref vJoyAxismax[i]);
-                    axisMod[i] = vJoyAxismax[i] / 255;
-                    AppController.logBuffer += "vJoy: " + axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + " | Mod: " + axisMod[i].ToString() + Environment.NewLine;
+                    AppController.logBuffer += "vJoy: " + axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + Environment.NewLine;
                 }
             }
+            BuiltIn.vJoy_Emu.newMaxes = vJoyAxismax;
+            BuiltIn.vJoy_Emu.maxesUpdateQueued = true;
 
             AppController.logBuffer += "vJoy: Running....";
             while (enabled) //loop driver
             {
                 try
                 {
-                    if (analogSettingsUpdateQueued)
-                    {
-                        analogSettingsUpdateQueued = false;
-                        for (int i = 0; i < 6; i += 1)
-                        {
-                            stickMods[i] = newAnalogMods[i];
-                            deadZones[i] = newDeadzones[i];
-                        }
-                        AppController.logBuffer += "vJoy: Updated Analog modifiers to:\n" + "X:" + stickMods[0].ToString() + ", Y:" + stickMods[1].ToString() + ", Z:" + stickMods[2].ToString() + ", rX:" + stickMods[3].ToString() + ", rY:" + stickMods[4].ToString() + ", rZ:" + stickMods[5].ToString() + Environment.NewLine;
-                        AppController.logBuffer += "vJoy: Updated Analog deadzones to:\n" + "X:" + deadZones[0].ToString() + ", Y:" + deadZones[1].ToString() + ", Z:" + deadZones[2].ToString() + ", rX:" + deadZones[3].ToString() + ", rY:" + deadZones[4].ToString() + ", rZ:" + deadZones[5].ToString() + Environment.NewLine;
-                    }
 
                     if (outputQueue.Count != 0) //new command
                     {
-                        byte[] command = (byte[])outputQueue.Dequeue();
-                        byte cmdType = command[0];
+                        int[] command = (int[])outputQueue.Dequeue();
+                        int cmdType = command[0];
 
-                        if (cmdType == (byte)1) //send input
+                        if (cmdType == 1) //send input
                         {
                             bool[] buttons = new bool[12];
                             byte[] pov = new byte[2];
@@ -266,38 +248,19 @@ namespace NintendoSharp
                             iReport.Buttons = (uint)data[0];
 
                             int[] newAxi = {0,0,0,0,0,0};
-                            for (int i = 0; i < 6; i += 1) //sticks
-                            {
-                                int axisBase = Convert.ToInt32(vJoyAxismax[i] / 2);
-                                long tmpVal = Convert.ToInt64(command[i + 17] * axisMod[i] * stickMods[i]);
-                                if (tmpVal < (deadZones[i] * axisMod[i]))
-                                {
-                                    tmpVal = 0;
-                                }
-                                long newValue = axisBase + tmpVal;
-                                if (newValue > vJoyAxismax[i]) //no overflow
-                                {
-                                    newValue = vJoyAxismax[i];
-                                }
-                                if (newValue < 0) //no overflow
-                                {
-                                    newValue = 0;
-                                }
-                                newAxi[i] = Convert.ToInt32(newValue);
-                            }
 
-                            iReport.bDevice = (byte)1;
-                            iReport.AxisX = newAxi[0];
-                            iReport.AxisY = newAxi[1];
-                            iReport.AxisZ = newAxi[2];
-                            iReport.AxisXRot = newAxi[3];
-                            iReport.AxisYRot = newAxi[4];
-                            iReport.AxisZRot = newAxi[5];
+                            iReport.bDevice = 1;
+                            iReport.AxisX = command[17];
+                            iReport.AxisY = command[18];
+                            iReport.AxisZ = command[19];
+                            iReport.AxisXRot = command[20];
+                            iReport.AxisYRot = command[21];
+                            iReport.AxisZRot = command[22];
                             joystick.UpdateVJD(1, ref iReport);
                             Thread.Sleep(1);
                             //AppController.logBuffer += "Update.";
                         }
-                        else if (cmdType == (byte)2)
+                        else if (cmdType == 2)
                         {
                             joystick.ResetVJD(id);
                             AppController.logBuffer += "vJoy: Reset." + Environment.NewLine;

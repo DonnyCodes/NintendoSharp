@@ -321,6 +321,7 @@
             this.comboBoxProgram.FormattingEnabled = true;
             this.comboBoxProgram.Items.AddRange(new object[] {
             "vJoy Interface",
+            "Input Tester (NYI)",
             "--",
             "Install a NintendoSharp Script"});
             this.comboBoxProgram.Location = new System.Drawing.Point(89, 167);

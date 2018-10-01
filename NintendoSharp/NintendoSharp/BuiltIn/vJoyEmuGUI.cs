@@ -20,19 +20,19 @@ namespace NintendoSharp.BuiltIn
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            VJoyController.newAnalogMods[0] = (double)numericUpDownModX.Value;
-            VJoyController.newAnalogMods[1] = (double)numericUpDownModY.Value;
-            VJoyController.newAnalogMods[2] = (double)numericUpDownModZ.Value;
-            VJoyController.newAnalogMods[3] = (double)numericUpDownModRX.Value;
-            VJoyController.newAnalogMods[4] = (double)numericUpDownModRY.Value;
-            VJoyController.newAnalogMods[5] = (double)numericUpDownModRZ.Value;
-            VJoyController.newDeadzones[0] = (int)numericUpDownDzX.Value;
-            VJoyController.newDeadzones[1] = (int)numericUpDownDzY.Value;
-            VJoyController.newDeadzones[2] = (int)numericUpDownDzZ.Value;
-            VJoyController.newDeadzones[3] = (int)numericUpDownDzRx.Value;
-            VJoyController.newDeadzones[4] = (int)numericUpDownDzRy.Value;
-            VJoyController.newDeadzones[5] = (int)numericUpDownDzRz.Value;
-            VJoyController.analogSettingsUpdateQueued = true;
+            vJoy_Emu.newAnalogMods[0] = (double)numericUpDownModX.Value;
+            vJoy_Emu.newAnalogMods[1] = (double)numericUpDownModY.Value;
+            vJoy_Emu.newAnalogMods[2] = (double)numericUpDownModZ.Value;
+            vJoy_Emu.newAnalogMods[3] = (double)numericUpDownModRX.Value;
+            vJoy_Emu.newAnalogMods[4] = (double)numericUpDownModRY.Value;
+            vJoy_Emu.newAnalogMods[5] = (double)numericUpDownModRZ.Value;
+            vJoy_Emu.newDeadzones[0] = (int)numericUpDownDzX.Value;
+            vJoy_Emu.newDeadzones[1] = (int)numericUpDownDzY.Value;
+            vJoy_Emu.newDeadzones[2] = (int)numericUpDownDzZ.Value;
+            vJoy_Emu.newDeadzones[3] = (int)numericUpDownDzRx.Value;
+            vJoy_Emu.newDeadzones[4] = (int)numericUpDownDzRy.Value;
+            vJoy_Emu.newDeadzones[5] = (int)numericUpDownDzRz.Value;
+            vJoy_Emu.deviceSettingsUpdateQueued = true;
             AppController.settings.vJoyModX = (double)numericUpDownModX.Value;
             AppController.settings.vJoyModY = (double)numericUpDownModY.Value;
             AppController.settings.vJoyModZ = (double)numericUpDownModZ.Value;

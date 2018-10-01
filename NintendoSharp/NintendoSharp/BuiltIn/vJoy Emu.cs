@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +14,28 @@ namespace NintendoSharp.BuiltIn
     {
         static Thread emuThread;
         static volatile bool enabled;
+        public static volatile bool deviceSettingsUpdateQueued = false;
+        public static volatile bool maxesUpdateQueued = false;
+        public static volatile long[] newMaxes = {0,0,0,0,0,0};
+        public static volatile int[] newDeadzones = {0,0,0,0,0,0};
+        public static volatile double[] newAnalogMods = { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
         public static vJoyEmuGUI gui = new vJoyEmuGUI();
 
         public static void Start()
         {
+            AppController.Log("App: Starting vJoy Sender.", Constants.Enums.LogMessageType.Basic);
+            newDeadzones[0] = AppController.settings.vJoyDeadX;
+            newDeadzones[1] = AppController.settings.vJoyDeadY;
+            newDeadzones[2] = AppController.settings.vJoyDeadZ;
+            newDeadzones[3] = AppController.settings.vJoyDeadRX;
+            newDeadzones[4] = AppController.settings.vJoyDeadRY;
+            newDeadzones[5] = AppController.settings.vJoyDeadRZ;
+            newAnalogMods[0] = AppController.settings.vJoyModX;
+            newAnalogMods[1] = AppController.settings.vJoyModY;
+            newAnalogMods[2] = AppController.settings.vJoyModZ;
+            newAnalogMods[3] = AppController.settings.vJoyModRX;
+            newAnalogMods[4] = AppController.settings.vJoyModRY;
+            newAnalogMods[5] = AppController.settings.vJoyModRZ;
             AppController.Log("App: Starting vJoy Sender.", Constants.Enums.LogMessageType.Basic);
             emuThread = new Thread(ThreadLoop);
             NintendoSpyWrapper.StartListening();
@@ -28,15 +47,35 @@ namespace NintendoSharp.BuiltIn
         {
             AppController.logBuffer += "App: vJoy Sender Started." + Environment.NewLine;
             enabled = true;
+
             ControllerState lastState = null;
             Thread.Sleep(100);
             NintendoSpyWrapper.ControlStyle controlStyle = NintendoSpyWrapper.controlStyle;
+            long[] axisMax = newMaxes;
+            int[] deadZones = newDeadzones;
+            double[] analogMods = newAnalogMods;
             while (enabled)
             {
+                if (deviceSettingsUpdateQueued)
+                {
+                    deviceSettingsUpdateQueued = false;
+                    analogMods = newAnalogMods;
+                    deadZones = newDeadzones;
+                    AppController.logBuffer += "App: Updated Analog modifiers to:\n" + "X:" + analogMods[0].ToString() + ", Y:" + analogMods[1].ToString() + ", Z:" + analogMods[2].ToString() + ", rX:" + analogMods[3].ToString() + ", rY:" + analogMods[4].ToString() + ", rZ:" + analogMods[5].ToString() + Environment.NewLine;
+                    AppController.logBuffer += "App: Updated Analog deadzones to:\n" + "X:" + deadZones[0].ToString() + ", Y:" + deadZones[1].ToString() + ", Z:" + deadZones[2].ToString() + ", rX:" + deadZones[3].ToString() + ", rY:" + deadZones[4].ToString() + ", rZ:" + deadZones[5].ToString() + Environment.NewLine;
+                }
+
+                if (maxesUpdateQueued)
+                {
+                    maxesUpdateQueued = false;
+                    axisMax = newMaxes;
+                    AppController.logBuffer += "App: Updated vJoy Maximums to:\n" + "X:" + axisMax[0].ToString() + ", Y:" + axisMax[1].ToString() + ", Z:" + axisMax[2].ToString() + ", rX:" + axisMax[3].ToString() + ", rY:" + axisMax[4].ToString() + ", rZ:" + axisMax[5].ToString() + Environment.NewLine;
+                }
+
                 ControllerState thisState = NintendoSpyWrapper.state;
                 if (lastState == null || VJoyController.outputQueue.Count < 2)
                 {
-                    SendToVJoy(thisState, controlStyle);
+                    SendToVJoy(thisState, axisMax, deadZones, analogMods, controlStyle);
                     lastState = thisState;
                     //AppController.logBuffer = "Nintendo Spy:\n" + thisState.ToString() + Environment.NewLine;
                 }
@@ -44,7 +83,7 @@ namespace NintendoSharp.BuiltIn
             AppController.logBuffer += "App: vJoy Sender Stopped." + Environment.NewLine;
         }
 
-        public static byte BoolToByte(bool boolean)
+        public static int BoolToByte(bool boolean)
         {
             if (boolean)
             {
@@ -56,12 +95,16 @@ namespace NintendoSharp.BuiltIn
             }
         }
 
-        static void SendToVJoy(ControllerState state, NintendoSpyWrapper.ControlStyle controlStyle)
+        static void SendToVJoy(ControllerState state, long[] axisMax, int[] deadZones, double[] analogMods, NintendoSpyWrapper.ControlStyle controlStyle)
         {
-            byte[] newInput = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,128,128,128,128,128,128};
-            byte[] deadzones = { 5, 5, 5, 5, 5, 5 };
-            byte[] stickDefaults = {128,128,128,128,128,128};
-            int[] stickBytes = new int[6];
+            int[] newInput = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+            int[] axisStart = new int[6];
+            for (int i = 0; i < 6; i += 1)
+            {
+                axisStart[i] = Convert.ToInt32(axisMax[i] / 2);
+                newInput[17 + i] = axisStart[i];
+            }
+
             if (controlStyle == NintendoSpyWrapper.ControlStyle.GameCube)
             {
                 newInput[1] = BoolToByte(state.Buttons["a"]);
@@ -76,24 +119,13 @@ namespace NintendoSharp.BuiltIn
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                stickBytes[0] = (byte)(state.Analogs["lstick_x"] * 128);
-                stickBytes[1] = (byte)(state.Analogs["lstick_y"] * 128);
-                stickBytes[2] = (byte)(state.Analogs["trig_l"] * 128);
-                stickBytes[3] = (byte)(state.Analogs["cstick_x"] * 128);
-                stickBytes[4] = (byte)(state.Analogs["cstick_y"] * 128);
-                stickBytes[5] = (byte)(state.Analogs["trig_r"] * 128);
+                newInput[17] = Convert.ToInt32(state.Analogs["lstick_x"] * axisMax[0]);
+                newInput[18] = Convert.ToInt32(state.Analogs["lstick_y"] * axisMax[1]);
+                newInput[19] = Convert.ToInt32(state.Analogs["trig_l"] * axisMax[2]);
+                newInput[20] = Convert.ToInt32(state.Analogs["cstick_x"] * axisMax[3]);
+                newInput[21] = Convert.ToInt32(state.Analogs["cstick_y"] * axisMax[4]);
+                newInput[22] = Convert.ToInt32(state.Analogs["trig_r"] * axisMax[5]);
 
-                for (int i = 0; i < 6; i += 1)
-                {
-                    if (Math.Abs(stickBytes[i]) > deadzones[i])
-                    {
-                        newInput[i + 17] = (byte)(stickBytes[i]);
-                    }
-                    else
-                    {
-                        newInput[i + 17] = stickDefaults[i];
-                    }
-                }
             }
             else if (controlStyle == NintendoSpyWrapper.ControlStyle.N64)
             {
@@ -111,28 +143,22 @@ namespace NintendoSharp.BuiltIn
                 newInput[14] = BoolToByte(state.Buttons["left"]);
                 newInput[15] = BoolToByte(state.Buttons["down"]);
                 newInput[16] = BoolToByte(state.Buttons["right"]);
-                stickBytes[0] = (byte)(state.Analogs["stick_x"] * 128);
-                stickBytes[1] = (byte)(state.Analogs["stick_y"] * 128);
-                newInput[19] = (byte)0;
-                newInput[20] = (byte)0;
-                newInput[21] = (byte)0;
-                newInput[22] = (byte)0;
-                if (Math.Abs(stickBytes[0]) > deadzones[0])
+                newInput[17] = Convert.ToInt32(state.Analogs["stick_x"] * analogMods[0] * axisMax[0]);
+                newInput[18] = Convert.ToInt32(state.Analogs["stick_y"] * analogMods[1] * axisMax[1]);
+            }
+            
+            for (int i = 0; i < 6; i += 1)
+            {
+                long tmp = Convert.ToInt64(axisStart[i] + newInput[17 + i]);
+                if (tmp > axisMax[i])
                 {
-                    newInput[17] = (byte)(stickBytes[0]);
+                    tmp = axisMax[i];
                 }
-                else
+                if (tmp < 0)
                 {
-                    newInput[17] = 0;
+                    tmp = 0;
                 }
-                if (Math.Abs(stickBytes[1]) > deadzones[1])
-                {
-                    newInput[18] = (byte)(stickBytes[1]);
-                }
-                else
-                {
-                    newInput[18] = 0;
-                }
+                newInput[17 + i] = Convert.ToInt32(tmp);
             }
             VJoyController.outputQueue.Enqueue(newInput);
         }

@@ -157,7 +157,15 @@ namespace NintendoSharp.UI
         private void buttonProgramGUI_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Just Press \"Start\" and use the \"vjoy\" input in your game/emulator.");
-            BuiltIn.vJoy_Emu.OnGUI();
+            string programName = this.comboBoxProgram.GetItemText(this.comboBoxProgram.SelectedItem);
+            if (programName.StartsWith("vJoy"))
+            {
+                BuiltIn.vJoy_Emu.OnGUI();
+            }
+            else if (programName.StartsWith("Input"))
+            {
+                BuiltIn.InputSender.InputSender_Prog.GUI();
+            }
         }
 
         private void buttonProgramStart_Click(object sender, EventArgs e)
