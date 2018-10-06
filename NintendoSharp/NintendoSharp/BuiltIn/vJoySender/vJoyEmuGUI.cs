@@ -124,5 +124,10 @@ namespace NintendoSharp.BuiltIn
         {
             MessageBox.Show("Ask Bob.");
         }
+
+        private void vJoyEmuGUI_Load(object sender, EventArgs e)
+        {
+            comboBoxMappingInfo.SelectedIndex = 2;
+        }
     }
 }

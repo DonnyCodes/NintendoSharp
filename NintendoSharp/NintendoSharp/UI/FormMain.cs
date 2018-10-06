@@ -21,8 +21,8 @@ namespace NintendoSharp.UI
         {
             AppController.mainForm = this;
             this.Icon = Properties.Resources.nsharp;
-            RefreshComPorts();
             AppController.Startup();
+            RefreshComPorts();
             labelAppStatus.ForeColor = Color.LightGreen;
             LoadFromSettings();
             labelAppStatus.Text = "Ready";
@@ -37,16 +37,22 @@ namespace NintendoSharp.UI
         void RefreshComPorts()
         {
             comboBoxPorts.Items.Clear();
-            foreach (string portStr in SerialPort.GetPortNames())
+            string[] newPorts = SerialPort.GetPortNames();
+            if (newPorts.Length == 0)
+            {
+                AppController.Log("No serial ports found! Please make sure your NintendoSpy or Arduino is plugged in to one of your PC's USB ports, and then press the refresh button.", Enums.LogMessageType.Warning);
+            }
+            foreach (string portStr in newPorts)
             {
                 comboBoxPorts.Items.Add(portStr);
+                AppController.Log("Found Serial Port: " + portStr, Enums.LogMessageType.Basic);
             }
         }
 
         private void comboBoxPorts_SelectedIndexChanged(object sender, EventArgs e)
         {
             string newPrtStr = this.comboBoxPorts.GetItemText(this.comboBoxPorts.SelectedItem);
-            SerialController.portNameNew = newPrtStr;
+            IO.SerialController.portNameNew = newPrtStr;
             AppController.Log("Port Change: " + newPrtStr, Enums.LogMessageType.Basic);
             comboBoxBoard.Enabled = true;
         }
@@ -162,9 +168,9 @@ namespace NintendoSharp.UI
             {
                 BuiltIn.vJoy_Emu.OnGUI();
             }
-            else if (programName.StartsWith("Input"))
+            else
             {
-                BuiltIn.InputSender.InputSender_Prog.GUI();
+                //BuiltIn.InputSender.InputSender_Prog.GUI();
             }
         }
 
@@ -210,10 +216,6 @@ namespace NintendoSharp.UI
         {
             try
             {
-                if (AppController.settings.selectedDevice != -1)
-                {
-                    comboBoxPorts.SelectedIndex = AppController.settings.selectedDevice;
-                }
                 if (AppController.settings.selectedConsole != -1)
                 {
                     comboBoxConsole.SelectedIndex = AppController.settings.selectedConsole;
@@ -237,6 +239,10 @@ namespace NintendoSharp.UI
                 if (AppController.settings.selectedFirmware != -1)
                 {
                     comboBoxFirmware.SelectedIndex = AppController.settings.selectedFirmware;
+                }
+                if (AppController.settings.selectedDevice != -1)
+                {
+                    comboBoxPorts.SelectedIndex = AppController.settings.selectedDevice;
                 }
             }
             catch (Exception exc)
@@ -312,13 +318,20 @@ namespace NintendoSharp.UI
 
         private void labelHelp_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Ask Bob");
+            MessageBox.Show("Ask Bob.");
         }
 
         private void comboBoxProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
-            buttonProgramGUI.Enabled = true;
-            buttonProgramStart.Enabled = true;
+            if (comboBoxProgram.SelectedIndex == comboBoxProgram.Items.Count - 1)
+            {
+                MessageBox.Show("Coming Soon.");
+            }
+            else
+            {
+                buttonProgramGUI.Enabled = true;
+                buttonProgramStart.Enabled = true;
+            }
         }
 
         private void linkLabelWebsite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

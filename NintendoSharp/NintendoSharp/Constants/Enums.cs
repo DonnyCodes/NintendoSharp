@@ -17,6 +17,9 @@ namespace NintendoSharp.Constants
             public enum Bluetooth { Wii_Remote, WiiU_Gamepad, Custom_DLL };
             public enum NintendoSpy {NES, SNES, N64, GameCube};
         }
+        public enum Button { A, B, X, Y, Z, S, L, R, DU, DL, DD, DR, CU, CL, CD, CR };
+        public enum Axis { X, Y, cX, cY, trigL, trigR };
+
         public enum LogMessageType {Basic, Warning, Error, Debug};
     }
 }

@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.Net;
 using System.Net.NetworkInformation;
+using NintendoSharp.Control;
 
 namespace NintendoSharp
 {
@@ -27,6 +28,8 @@ namespace NintendoSharp
 
         public static Settings settings = new Settings();
         public static volatile string logBuffer = "";
+
+        public static UserScript loadedProgram;
 
         static System.Windows.Forms.Timer LogBufferTimer;
 
@@ -53,7 +56,7 @@ namespace NintendoSharp
                 {
                     newSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(appFolder + "/" + "settings.js"));
                     settings = newSettings;
-                    Log("Loaded Settings.", Enums.LogMessageType.Basic);
+                    //Log("Loaded Settings.", Enums.LogMessageType.Basic);
                     if (settings.version != version)
                     {
                         Log("You have updated to NentendoSharp " + version + " successfully!", Enums.LogMessageType.Basic);
@@ -68,20 +71,19 @@ namespace NintendoSharp
                 }
             }
             File.WriteAllText(appFolder + "/" + "settings.js", JsonConvert.SerializeObject(settings));
-            Log("Settings Saved.", Enums.LogMessageType.Basic);
+            //Log("Settings Saved.", Enums.LogMessageType.Basic);
             if (firstStart)
             {
-                Log("Welcome to NintendoSharp Newb!", Enums.LogMessageType.Basic);
+                Log("Startup Complete! Welcome to NintendoSharp Newb!", Enums.LogMessageType.Basic);
             }
             else
             {
-                Log("Welcome to NintendoSharp!", Enums.LogMessageType.Basic);
+                Log("Startup Complete! Welcome to NintendoSharp!", Enums.LogMessageType.Basic);
             }
             LogBufferTimer = new System.Windows.Forms.Timer();
             LogBufferTimer.Interval = 100;
             LogBufferTimer.Tick += tmLog_Tick;
             LogBufferTimer.Start();
-            Log("Startup Complete!", Enums.LogMessageType.Basic);
             updateThread = new Thread(UpdateThread);
             updateThread.Start();
         }
@@ -119,7 +121,7 @@ namespace NintendoSharp
 
         public static void UpdateThread()
         {
-            logBuffer += "Checking For Updates...." + Environment.NewLine;
+            logBuffer += "Connecting to the NintendoSharp Server...." + Environment.NewLine;
             Ping ping = new Ping();
             bool pingError = false;
             try
@@ -134,21 +136,21 @@ namespace NintendoSharp
             {
                 pingError = true;
             }
-            
             if (pingError)
             {
-                logBuffer += "Unable to access update server. Check GitHub for updates." + Environment.NewLine;
+                logBuffer += "Unable to access the NintendoSharp server. Patchnotes will be Unavailable. Check GitHub for updates." + Environment.NewLine;
                 return;
             }
 
+            logBuffer += "Connected! Checking for updates...." + Environment.NewLine;
             //Update Check Here
         }
 
         public static void ShutDown()
         {
-            VJoyController.enabled = false;
+            IO.VJoyController.enabled = false;
             BuiltIn.vJoy_Emu.Stop();
-            SerialController.StopSerial();
+            IO.SerialController.StopSerial();
             Application.Exit();
         }
     }

@@ -7,7 +7,7 @@ using System.Threading;
 using vJoyInterfaceWrap;
 using System.Collections;
 
-namespace NintendoSharp
+namespace NintendoSharp.IO
 {
     public static class VJoyController
     {

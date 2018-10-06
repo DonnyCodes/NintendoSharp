@@ -39,48 +39,55 @@ namespace NintendoSharp.BuiltIn
             AppController.Log("App: Starting vJoy Sender.", Constants.Enums.LogMessageType.Basic);
             emuThread = new Thread(ThreadLoop);
             NintendoSpyWrapper.StartListening();
-            VJoyController.StartVjoyThread();
+            IO.VJoyController.StartVjoyThread();
             emuThread.Start();
         }
 
         public static void ThreadLoop()
         {
-            AppController.logBuffer += "App: vJoy Sender Started." + Environment.NewLine;
-            enabled = true;
-
-            ControllerState lastState = null;
-            Thread.Sleep(100);
-            NintendoSpyWrapper.ControlStyle controlStyle = NintendoSpyWrapper.controlStyle;
-            long[] axisMax = newMaxes;
-            int[] deadZones = newDeadzones;
-            double[] analogMods = newAnalogMods;
-            while (enabled)
+            try
             {
-                if (deviceSettingsUpdateQueued)
-                {
-                    deviceSettingsUpdateQueued = false;
-                    analogMods = newAnalogMods;
-                    deadZones = newDeadzones;
-                    AppController.logBuffer += "App: Updated Analog modifiers to:\n" + "X:" + analogMods[0].ToString() + ", Y:" + analogMods[1].ToString() + ", Z:" + analogMods[2].ToString() + ", rX:" + analogMods[3].ToString() + ", rY:" + analogMods[4].ToString() + ", rZ:" + analogMods[5].ToString() + Environment.NewLine;
-                    AppController.logBuffer += "App: Updated Analog deadzones to:\n" + "X:" + deadZones[0].ToString() + ", Y:" + deadZones[1].ToString() + ", Z:" + deadZones[2].ToString() + ", rX:" + deadZones[3].ToString() + ", rY:" + deadZones[4].ToString() + ", rZ:" + deadZones[5].ToString() + Environment.NewLine;
-                }
+                AppController.logBuffer += "App: vJoy Sender Started." + Environment.NewLine;
+                enabled = true;
 
-                if (maxesUpdateQueued)
+                ControllerState lastState = null;
+                Thread.Sleep(100);
+                NintendoSpyWrapper.ControlStyle controlStyle = NintendoSpyWrapper.controlStyle;
+                long[] axisMax = newMaxes;
+                int[] deadZones = newDeadzones;
+                double[] analogMods = newAnalogMods;
+                while (enabled)
                 {
-                    maxesUpdateQueued = false;
-                    axisMax = newMaxes;
-                    AppController.logBuffer += "App: Updated vJoy Maximums to:\n" + "X:" + axisMax[0].ToString() + ", Y:" + axisMax[1].ToString() + ", Z:" + axisMax[2].ToString() + ", rX:" + axisMax[3].ToString() + ", rY:" + axisMax[4].ToString() + ", rZ:" + axisMax[5].ToString() + Environment.NewLine;
-                }
+                    if (deviceSettingsUpdateQueued)
+                    {
+                        deviceSettingsUpdateQueued = false;
+                        analogMods = newAnalogMods;
+                        deadZones = newDeadzones;
+                        AppController.logBuffer += "App: Updated Analog modifiers to:\n" + "X:" + analogMods[0].ToString() + ", Y:" + analogMods[1].ToString() + ", Z:" + analogMods[2].ToString() + ", rX:" + analogMods[3].ToString() + ", rY:" + analogMods[4].ToString() + ", rZ:" + analogMods[5].ToString() + Environment.NewLine;
+                        AppController.logBuffer += "App: Updated Analog deadzones to:\n" + "X:" + deadZones[0].ToString() + ", Y:" + deadZones[1].ToString() + ", Z:" + deadZones[2].ToString() + ", rX:" + deadZones[3].ToString() + ", rY:" + deadZones[4].ToString() + ", rZ:" + deadZones[5].ToString() + Environment.NewLine;
+                    }
 
-                ControllerState thisState = NintendoSpyWrapper.state;
-                if (lastState == null || VJoyController.outputQueue.Count < 2)
-                {
-                    SendToVJoy(thisState, axisMax, deadZones, analogMods, controlStyle);
-                    lastState = thisState;
-                    //AppController.logBuffer = "Nintendo Spy:\n" + thisState.ToString() + Environment.NewLine;
+                    if (maxesUpdateQueued)
+                    {
+                        maxesUpdateQueued = false;
+                        axisMax = newMaxes;
+                        AppController.logBuffer += "App: Updated vJoy Maximums to:\n" + "X:" + axisMax[0].ToString() + ", Y:" + axisMax[1].ToString() + ", Z:" + axisMax[2].ToString() + ", rX:" + axisMax[3].ToString() + ", rY:" + axisMax[4].ToString() + ", rZ:" + axisMax[5].ToString() + Environment.NewLine;
+                    }
+
+                    ControllerState thisState = NintendoSpyWrapper.state;
+                    if (lastState == null || IO.VJoyController.outputQueue.Count < 2)
+                    {
+                        SendToVJoy(thisState, axisMax, deadZones, analogMods, controlStyle);
+                        lastState = thisState;
+                        //AppController.logBuffer = "Nintendo Spy:\n" + thisState.ToString() + Environment.NewLine;
+                    }
                 }
+                AppController.logBuffer += "App: vJoy Sender Stopped." + Environment.NewLine;
             }
-            AppController.logBuffer += "App: vJoy Sender Stopped." + Environment.NewLine;
+            catch(Exception exc)
+            {
+                
+            }
         }
 
         public static int BoolToByte(bool boolean)
@@ -160,7 +167,7 @@ namespace NintendoSharp.BuiltIn
                 }
                 newInput[17 + i] = Convert.ToInt32(tmp);
             }
-            VJoyController.outputQueue.Enqueue(newInput);
+            IO.VJoyController.outputQueue.Enqueue(newInput);
         }
 
         public static void Stop()

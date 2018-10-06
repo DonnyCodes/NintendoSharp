@@ -70,6 +70,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.buttonLog = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRefresh)).BeginInit();
             this.panel6.SuspendLayout();
@@ -284,12 +285,9 @@
             this.comboBoxFirmware.FormattingEnabled = true;
             this.comboBoxFirmware.Items.AddRange(new object[] {
             "Board Firmware",
-            "--",
             "Flash Newest",
-            "--",
             "Flash 2nd Newest",
-            "Flash 3rd Newest",
-            "--",
+            "Flash NintendoSpy",
             "Flash Other"});
             this.comboBoxFirmware.Location = new System.Drawing.Point(12, 124);
             this.comboBoxFirmware.Name = "comboBoxFirmware";
@@ -321,9 +319,7 @@
             this.comboBoxProgram.FormattingEnabled = true;
             this.comboBoxProgram.Items.AddRange(new object[] {
             "vJoy Interface",
-            "Input Tester (NYI)",
-            "--",
-            "Install a NintendoSharp Script"});
+            "--Install a NintendoSharp Script--"});
             this.comboBoxProgram.Location = new System.Drawing.Point(89, 167);
             this.comboBoxProgram.Name = "comboBoxProgram";
             this.comboBoxProgram.Size = new System.Drawing.Size(246, 21);
@@ -347,7 +343,7 @@
             // 
             this.linkLabelWebsite.AutoSize = true;
             this.linkLabelWebsite.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.linkLabelWebsite.Location = new System.Drawing.Point(334, 5);
+            this.linkLabelWebsite.Location = new System.Drawing.Point(289, 7);
             this.linkLabelWebsite.Name = "linkLabelWebsite";
             this.linkLabelWebsite.Size = new System.Drawing.Size(46, 13);
             this.linkLabelWebsite.TabIndex = 5;
@@ -358,7 +354,7 @@
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.White;
-            this.panel7.Location = new System.Drawing.Point(312, 3);
+            this.panel7.Location = new System.Drawing.Point(270, 3);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(2, 18);
             this.panel7.TabIndex = 4;
@@ -366,11 +362,11 @@
             // labelDisclaimer
             // 
             this.labelDisclaimer.AutoSize = true;
-            this.labelDisclaimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDisclaimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDisclaimer.ForeColor = System.Drawing.Color.Yellow;
-            this.labelDisclaimer.Location = new System.Drawing.Point(9, 4);
+            this.labelDisclaimer.Location = new System.Drawing.Point(9, 5);
             this.labelDisclaimer.Name = "labelDisclaimer";
-            this.labelDisclaimer.Size = new System.Drawing.Size(289, 16);
+            this.labelDisclaimer.Size = new System.Drawing.Size(255, 16);
             this.labelDisclaimer.TabIndex = 0;
             this.labelDisclaimer.Text = "-= NOT AFFILIATED WITH NINTENDO =-";
             this.labelDisclaimer.Click += new System.EventHandler(this.labelDisclaimer_Click);
@@ -469,9 +465,9 @@
             // 
             this.buttonProgramGUI.Enabled = false;
             this.buttonProgramGUI.ForeColor = System.Drawing.Color.Black;
-            this.buttonProgramGUI.Location = new System.Drawing.Point(341, 165);
+            this.buttonProgramGUI.Location = new System.Drawing.Point(362, 159);
             this.buttonProgramGUI.Name = "buttonProgramGUI";
-            this.buttonProgramGUI.Size = new System.Drawing.Size(37, 23);
+            this.buttonProgramGUI.Size = new System.Drawing.Size(37, 34);
             this.buttonProgramGUI.TabIndex = 30;
             this.buttonProgramGUI.Text = "GUI";
             this.buttonProgramGUI.UseVisualStyleBackColor = true;
@@ -516,12 +512,24 @@
             this.buttonLog.UseVisualStyleBackColor = true;
             this.buttonLog.Click += new System.EventHandler(this.buttonLog_Click);
             // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(341, 160);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(15, 33);
+            this.button1.TabIndex = 34;
+            this.button1.Text = "?";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.ClientSize = new System.Drawing.Size(498, 244);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonLog);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -611,5 +619,6 @@
         private System.Windows.Forms.Label labelHelp;
         public System.Windows.Forms.ComboBox comboBoxPorts;
         public System.Windows.Forms.ComboBox comboBoxControllerType;
+        private System.Windows.Forms.Button button1;
     }
 }

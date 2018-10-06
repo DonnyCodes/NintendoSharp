@@ -12,7 +12,7 @@ namespace NintendoSharp.NintendoSpyW
     {
         static InputSource source;
         static IControllerReader _reader;
-        public static volatile ControllerState state;
+        public static volatile ControllerState state = ControllerState.Zero;
 
         public enum ControlStyle {NES,SNES,N64,GameCube};
 
@@ -64,6 +64,12 @@ namespace NintendoSharp.NintendoSpyW
             {
                 AppController.Log("NintendoSpy: Error:\n" + exc.ToString(), Constants.Enums.LogMessageType.Error);
             }
+        }
+
+        public static void StopListening()
+        {
+            _reader.Finish();
+            _reader = null;
         }
     }
 }

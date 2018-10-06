@@ -49,15 +49,11 @@
     <ApplicationIcon>nsharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.8.8.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.8.8\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
       <HintPath>..\packages\SlimDX.4.0.13.44\lib\NET40\SlimDX.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -90,15 +86,16 @@
       <DependentUpon>InputSenderSendForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BuiltIn\InputSender\InputSender_Prog.cs" />
-    <Compile Include="BuiltIn\vJoy Emu.cs" />
-    <Compile Include="BuiltIn\vJoyEmuGUI.cs">
+    <Compile Include="BuiltIn\vJoySender\vJoy Emu.cs" />
+    <Compile Include="BuiltIn\vJoySender\vJoyEmuGUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BuiltIn\vJoyEmuGUI.Designer.cs">
+    <Compile Include="BuiltIn\vJoySender\vJoyEmuGUI.Designer.cs">
       <DependentUpon>vJoyEmuGUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants\Enums.cs" />
     <Compile Include="Constants\WinImports.cs" />
+    <Compile Include="Control\UserScript.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,27 +104,34 @@
     </Compile>
     <Compile Include="IO\InputController.cs" />
     <Compile Include="IO\OutputController.cs" />
-    <Compile Include="NintendoSpyW\IO\ConfigParseException.cs" />
-    <Compile Include="NintendoSpyW\IO\InputSource.cs" />
-    <Compile Include="NintendoSpyW\IO\SerialMonitor.cs" />
-    <Compile Include="NintendoSpyW\NintendoSpyWrapper.cs" />
-    <Compile Include="NintendoSpyW\Readers\ClassicController.cs" />
-    <Compile Include="NintendoSpyW\Readers\ControllerState.cs" />
-    <Compile Include="NintendoSpyW\Readers\ControllerStateBuilder.cs" />
-    <Compile Include="NintendoSpyW\Readers\DelayedControllerReader.cs" />
-    <Compile Include="NintendoSpyW\Readers\GameCube.cs" />
-    <Compile Include="NintendoSpyW\Readers\GamepadReader.cs" />
-    <Compile Include="NintendoSpyW\Readers\IControllerReader.cs" />
-    <Compile Include="NintendoSpyW\Readers\Nintendo64.cs" />
-    <Compile Include="NintendoSpyW\Readers\SerialControllerReader.cs" />
-    <Compile Include="NintendoSpyW\Readers\SignalTool.cs" />
-    <Compile Include="NintendoSpyW\Readers\StateChecker.cs" />
-    <Compile Include="NintendoSpyW\Readers\SuperNESandNES.cs" />
-    <Compile Include="NintendoSpyW\Readers\XInputReader.cs" />
+    <Compile Include="NintendoSpy_Wrapper\IO\ConfigParseException.cs" />
+    <Compile Include="NintendoSpy_Wrapper\IO\InputSource.cs" />
+    <Compile Include="NintendoSpy_Wrapper\IO\SerialMonitor.cs" />
+    <Compile Include="NintendoSpy_Wrapper\NintendoSpyWrapper.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\ClassicController.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\ControllerState.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\ControllerStateBuilder.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\DelayedControllerReader.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\GameCube.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\GamepadReader.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\IControllerReader.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\Nintendo64.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\SerialControllerReader.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\SignalTool.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\StateChecker.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\SuperNESandNES.cs" />
+    <Compile Include="NintendoSpy_Wrapper\Readers\XInputReader.cs" />
+    <Compile Include="Objects\ControllerState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialController.cs" />
+    <Compile Include="IO\SerialController.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="UI\CrashHandler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CrashHandler.Designer.cs">
+      <DependentUpon>CrashHandler.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\FormLog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,14 +144,14 @@
     <Compile Include="UI\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="VJoyController.cs" />
+    <Compile Include="IO\VJoyController.cs" />
     <EmbeddedResource Include="BuiltIn\InputSender\InputSenderGUI.resx">
       <DependentUpon>InputSenderGUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BuiltIn\InputSender\InputSenderSendForm.resx">
       <DependentUpon>InputSenderSendForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BuiltIn\vJoyEmuGUI.resx">
+    <EmbeddedResource Include="BuiltIn\vJoySender\vJoyEmuGUI.resx">
       <DependentUpon>vJoyEmuGUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -160,6 +164,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\CrashHandler.resx">
+      <DependentUpon>CrashHandler.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FormLog.resx">
       <DependentUpon>FormLog.cs</DependentUpon>
     </EmbeddedResource>
@@ -180,9 +187,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Control\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\nico.ico" />
   </ItemGroup>
@@ -213,13 +218,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="nsharp.ico" />
+    <None Include="Resources\vJoyInterface.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\GameCube.png" />
     <None Include="Resources\N64.png" />
     <None Include="Resources\SNES.png" />
     <None Include="Resources\NES.png" />
-    <None Include="Resources\vJoyInterface.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

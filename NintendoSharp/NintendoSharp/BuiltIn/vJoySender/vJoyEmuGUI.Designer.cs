@@ -739,6 +739,7 @@
             this.Name = "vJoyEmuGUI";
             this.Text = "vJoy Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.vJoyEmuGUI_FormClosing);
+            this.Load += new System.EventHandler(this.vJoyEmuGUI_Load);
             this.Shown += new System.EventHandler(this.vJoyEmuGUI_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDzY)).EndInit();
