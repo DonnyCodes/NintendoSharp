@@ -7,21 +7,35 @@ using System.Threading.Tasks;
 using System.Threading;
 using NintendoSharp.NintendoSpyW.Readers;
 using NintendoSharp.NintendoSpyW;
+using NintendoSharp.Control;
 
-namespace NintendoSharp.BuiltIn
+namespace NintendoSharp.BuiltIn.vJoyInterface
 {
-    public static class vJoy_Emu
+    public class vJoy_Emu : UserScript
     {
-        static Thread emuThread;
-        static volatile bool enabled;
-        public static volatile bool deviceSettingsUpdateQueued = false;
-        public static volatile bool maxesUpdateQueued = false;
-        public static volatile long[] newMaxes = {0,0,0,0,0,0};
-        public static volatile int[] newDeadzones = {0,0,0,0,0,0};
-        public static volatile double[] newAnalogMods = { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
-        public static vJoyEmuGUI gui = new vJoyEmuGUI();
+        Thread emuThread;
+        volatile bool enabled;
+        public volatile bool deviceSettingsUpdateQueued = false;
+        public volatile bool maxesUpdateQueued = false;
+        public volatile long[] newMaxes = {0,0,0,0,0,0};
+        public volatile int[] newDeadzones = {0,0,0,0,0,0};
+        public volatile double[] newAnalogMods = { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00 };
+        public vJoyEmuGUI gui = new vJoyEmuGUI();
 
-        public static void Start()
+        public vJoy_Emu()
+        {
+            author = "Bob";
+            name = "vJoy Interface";
+            description = "Allows you to send inputs to a vJoy driver.";
+            versionID = "0.5b";
+        }
+
+        public override void Load()
+        {
+            gui.parent = this;
+        }
+
+        public override void Start()
         {
             AppController.Log("App: Starting vJoy Sender.", Constants.Enums.LogMessageType.Basic);
             newDeadzones[0] = AppController.settings.vJoyDeadX;
@@ -40,10 +54,11 @@ namespace NintendoSharp.BuiltIn
             emuThread = new Thread(ThreadLoop);
             NintendoSpyWrapper.StartListening();
             IO.VJoyController.StartVjoyThread();
+            emuThread.IsBackground = true;
             emuThread.Start();
         }
 
-        public static void ThreadLoop()
+        public void ThreadLoop()
         {
             try
             {
@@ -86,11 +101,11 @@ namespace NintendoSharp.BuiltIn
             }
             catch(Exception exc)
             {
-                
+                new UI.CrashHandler(exc).Show();
             }
         }
 
-        public static int BoolToByte(bool boolean)
+        int BoolToByte(bool boolean)
         {
             if (boolean)
             {
@@ -102,7 +117,7 @@ namespace NintendoSharp.BuiltIn
             }
         }
 
-        static void SendToVJoy(ControllerState state, long[] axisMax, int[] deadZones, double[] analogMods, NintendoSpyWrapper.ControlStyle controlStyle)
+        void SendToVJoy(ControllerState state, long[] axisMax, int[] deadZones, double[] analogMods, NintendoSpyWrapper.ControlStyle controlStyle)
         {
             int[] newInput = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
             int[] axisStart = new int[6];
@@ -170,13 +185,22 @@ namespace NintendoSharp.BuiltIn
             IO.VJoyController.outputQueue.Enqueue(newInput);
         }
 
-        public static void Stop()
+        public override void Stop()
         {
             AppController.Log("App: Stopping vJoy Sender.", Constants.Enums.LogMessageType.Basic);
             enabled = false;
         }
 
-        public static void OnGUI()
+        public override void Unload()
+        {
+            if (enabled)
+            {
+                enabled = false;
+                Thread.Sleep(10);
+            }
+        }
+
+        public override void GUI()
         {
             gui.Show();
             gui.BringToFront();

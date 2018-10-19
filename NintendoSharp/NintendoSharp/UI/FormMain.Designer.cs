@@ -52,7 +52,7 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.comboBoxProgram = new System.Windows.Forms.ComboBox();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.linkLabelWebsite = new System.Windows.Forms.LinkLabel();
+            this.linkLabelGitHub = new System.Windows.Forms.LinkLabel();
             this.panel7 = new System.Windows.Forms.Panel();
             this.labelDisclaimer = new System.Windows.Forms.Label();
             this.timerDisclaimer = new System.Windows.Forms.Timer(this.components);
@@ -70,7 +70,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.buttonLog = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonProgramInfo = new System.Windows.Forms.Button();
+            this.linkLabelWeb = new System.Windows.Forms.LinkLabel();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRefresh)).BeginInit();
             this.panel6.SuspendLayout();
@@ -86,7 +87,7 @@
             this.panelTop.Controls.Add(this.labelTitle);
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(506, 26);
+            this.panelTop.Size = new System.Drawing.Size(525, 26);
             this.panelTop.TabIndex = 0;
             this.panelTop.Paint += new System.Windows.Forms.PaintEventHandler(this.panelTop_Paint);
             this.panelTop.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseMove);
@@ -96,7 +97,7 @@
             this.labelHelp.AutoSize = true;
             this.labelHelp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelHelp.ForeColor = System.Drawing.Color.White;
-            this.labelHelp.Location = new System.Drawing.Point(411, 3);
+            this.labelHelp.Location = new System.Drawing.Point(430, 2);
             this.labelHelp.Name = "labelHelp";
             this.labelHelp.Size = new System.Drawing.Size(19, 20);
             this.labelHelp.TabIndex = 4;
@@ -106,7 +107,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Location = new System.Drawing.Point(436, 4);
+            this.panel2.Location = new System.Drawing.Point(455, 3);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(2, 18);
             this.panel2.TabIndex = 3;
@@ -116,7 +117,7 @@
             this.labelClose.AutoSize = true;
             this.labelClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.labelClose.Location = new System.Drawing.Point(471, 2);
+            this.labelClose.Location = new System.Drawing.Point(490, 1);
             this.labelClose.Name = "labelClose";
             this.labelClose.Size = new System.Drawing.Size(25, 24);
             this.labelClose.TabIndex = 2;
@@ -128,7 +129,7 @@
             this.labelMinimize.AutoSize = true;
             this.labelMinimize.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelMinimize.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.labelMinimize.Location = new System.Drawing.Point(443, -4);
+            this.labelMinimize.Location = new System.Drawing.Point(462, -5);
             this.labelMinimize.Name = "labelMinimize";
             this.labelMinimize.Size = new System.Drawing.Size(23, 31);
             this.labelMinimize.TabIndex = 3;
@@ -145,13 +146,14 @@
             this.labelTitle.Size = new System.Drawing.Size(111, 16);
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "NintendoSharp";
+            this.labelTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.labelTitle_MouseMove);
             // 
             // labelVersion
             // 
             this.labelVersion.AutoSize = true;
             this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelVersion.ForeColor = System.Drawing.Color.Silver;
-            this.labelVersion.Location = new System.Drawing.Point(464, 8);
+            this.labelVersion.Location = new System.Drawing.Point(484, 7);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(31, 13);
             this.labelVersion.TabIndex = 1;
@@ -159,6 +161,7 @@
             // 
             // comboBoxPorts
             // 
+            this.comboBoxPorts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxPorts.FormattingEnabled = true;
             this.comboBoxPorts.Location = new System.Drawing.Point(12, 51);
             this.comboBoxPorts.Name = "comboBoxPorts";
@@ -190,6 +193,7 @@
             // 
             // comboBoxControllerPort
             // 
+            this.comboBoxControllerPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxControllerPort.FormattingEnabled = true;
             this.comboBoxControllerPort.Items.AddRange(new object[] {
             "None",
@@ -210,6 +214,7 @@
             // 
             // comboBoxConsole
             // 
+            this.comboBoxConsole.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxConsole.FormattingEnabled = true;
             this.comboBoxConsole.Items.AddRange(new object[] {
             "None",
@@ -250,6 +255,7 @@
             // comboBoxControllerType
             // 
             this.comboBoxControllerType.Enabled = false;
+            this.comboBoxControllerType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxControllerType.FormattingEnabled = true;
             this.comboBoxControllerType.Location = new System.Drawing.Point(309, 120);
             this.comboBoxControllerType.Name = "comboBoxControllerType";
@@ -259,6 +265,7 @@
             // comboBoxConsoleInput
             // 
             this.comboBoxConsoleInput.Enabled = false;
+            this.comboBoxConsoleInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxConsoleInput.FormattingEnabled = true;
             this.comboBoxConsoleInput.Location = new System.Drawing.Point(190, 120);
             this.comboBoxConsoleInput.Name = "comboBoxConsoleInput";
@@ -267,6 +274,7 @@
             // 
             // comboBoxBoard
             // 
+            this.comboBoxBoard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxBoard.FormattingEnabled = true;
             this.comboBoxBoard.Items.AddRange(new object[] {
             "Uno",
@@ -282,6 +290,7 @@
             // 
             // comboBoxFirmware
             // 
+            this.comboBoxFirmware.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxFirmware.FormattingEnabled = true;
             this.comboBoxFirmware.Items.AddRange(new object[] {
             "Board Firmware",
@@ -297,9 +306,10 @@
             // 
             // buttonSettings
             // 
-            this.buttonSettings.ForeColor = System.Drawing.Color.Black;
+            this.buttonSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSettings.ForeColor = System.Drawing.Color.White;
             this.buttonSettings.Image = global::NintendoSharp.Properties.Resources.settings;
-            this.buttonSettings.Location = new System.Drawing.Point(440, 44);
+            this.buttonSettings.Location = new System.Drawing.Point(426, 41);
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.Size = new System.Drawing.Size(40, 40);
             this.buttonSettings.TabIndex = 16;
@@ -316,10 +326,8 @@
             // 
             // comboBoxProgram
             // 
+            this.comboBoxProgram.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxProgram.FormattingEnabled = true;
-            this.comboBoxProgram.Items.AddRange(new object[] {
-            "vJoy Interface",
-            "--Install a NintendoSharp Script--"});
             this.comboBoxProgram.Location = new System.Drawing.Point(89, 167);
             this.comboBoxProgram.Name = "comboBoxProgram";
             this.comboBoxProgram.Size = new System.Drawing.Size(246, 21);
@@ -330,31 +338,32 @@
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.Black;
-            this.panel6.Controls.Add(this.linkLabelWebsite);
+            this.panel6.Controls.Add(this.linkLabelWeb);
+            this.panel6.Controls.Add(this.linkLabelGitHub);
             this.panel6.Controls.Add(this.panel7);
             this.panel6.Controls.Add(this.labelVersion);
             this.panel6.Controls.Add(this.labelDisclaimer);
             this.panel6.Location = new System.Drawing.Point(0, 222);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(506, 24);
+            this.panel6.Size = new System.Drawing.Size(525, 24);
             this.panel6.TabIndex = 19;
             // 
-            // linkLabelWebsite
+            // linkLabelGitHub
             // 
-            this.linkLabelWebsite.AutoSize = true;
-            this.linkLabelWebsite.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.linkLabelWebsite.Location = new System.Drawing.Point(289, 7);
-            this.linkLabelWebsite.Name = "linkLabelWebsite";
-            this.linkLabelWebsite.Size = new System.Drawing.Size(46, 13);
-            this.linkLabelWebsite.TabIndex = 5;
-            this.linkLabelWebsite.TabStop = true;
-            this.linkLabelWebsite.Text = "Website";
-            this.linkLabelWebsite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelWebsite_LinkClicked);
+            this.linkLabelGitHub.AutoSize = true;
+            this.linkLabelGitHub.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.linkLabelGitHub.Location = new System.Drawing.Point(290, 7);
+            this.linkLabelGitHub.Name = "linkLabelGitHub";
+            this.linkLabelGitHub.Size = new System.Drawing.Size(40, 13);
+            this.linkLabelGitHub.TabIndex = 5;
+            this.linkLabelGitHub.TabStop = true;
+            this.linkLabelGitHub.Text = "GitHub";
+            this.linkLabelGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelWebsite_LinkClicked);
             // 
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.White;
-            this.panel7.Location = new System.Drawing.Point(270, 3);
+            this.panel7.Location = new System.Drawing.Point(274, 3);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(2, 18);
             this.panel7.TabIndex = 4;
@@ -374,7 +383,7 @@
             // timerDisclaimer
             // 
             this.timerDisclaimer.Enabled = true;
-            this.timerDisclaimer.Interval = 1000;
+            this.timerDisclaimer.Interval = 2500;
             this.timerDisclaimer.Tick += new System.EventHandler(this.timerDisclaimer_Tick);
             // 
             // panel3
@@ -398,7 +407,7 @@
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.panel5.Location = new System.Drawing.Point(0, 198);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(500, 2);
+            this.panel5.Size = new System.Drawing.Size(525, 2);
             this.panel5.TabIndex = 7;
             // 
             // labelAppStatus
@@ -451,9 +460,10 @@
             // buttonProgramStart
             // 
             this.buttonProgramStart.Enabled = false;
+            this.buttonProgramStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonProgramStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonProgramStart.ForeColor = System.Drawing.Color.Black;
-            this.buttonProgramStart.Location = new System.Drawing.Point(405, 159);
+            this.buttonProgramStart.ForeColor = System.Drawing.Color.White;
+            this.buttonProgramStart.Location = new System.Drawing.Point(429, 159);
             this.buttonProgramStart.Name = "buttonProgramStart";
             this.buttonProgramStart.Size = new System.Drawing.Size(83, 34);
             this.buttonProgramStart.TabIndex = 29;
@@ -464,8 +474,9 @@
             // buttonProgramGUI
             // 
             this.buttonProgramGUI.Enabled = false;
-            this.buttonProgramGUI.ForeColor = System.Drawing.Color.Black;
-            this.buttonProgramGUI.Location = new System.Drawing.Point(362, 159);
+            this.buttonProgramGUI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonProgramGUI.ForeColor = System.Drawing.Color.White;
+            this.buttonProgramGUI.Location = new System.Drawing.Point(386, 159);
             this.buttonProgramGUI.Name = "buttonProgramGUI";
             this.buttonProgramGUI.Size = new System.Drawing.Size(37, 34);
             this.buttonProgramGUI.TabIndex = 30;
@@ -478,7 +489,7 @@
             this.panel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.panel8.Location = new System.Drawing.Point(0, 152);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(500, 2);
+            this.panel8.Size = new System.Drawing.Size(525, 2);
             this.panel8.TabIndex = 8;
             // 
             // label8
@@ -503,8 +514,9 @@
             // 
             // buttonLog
             // 
-            this.buttonLog.ForeColor = System.Drawing.Color.Black;
-            this.buttonLog.Location = new System.Drawing.Point(440, 101);
+            this.buttonLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonLog.ForeColor = System.Drawing.Color.White;
+            this.buttonLog.Location = new System.Drawing.Point(472, 40);
             this.buttonLog.Name = "buttonLog";
             this.buttonLog.Size = new System.Drawing.Size(40, 40);
             this.buttonLog.TabIndex = 33;
@@ -512,24 +524,38 @@
             this.buttonLog.UseVisualStyleBackColor = true;
             this.buttonLog.Click += new System.EventHandler(this.buttonLog_Click);
             // 
-            // button1
+            // buttonProgramInfo
             // 
-            this.button1.Enabled = false;
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(341, 160);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(15, 33);
-            this.button1.TabIndex = 34;
-            this.button1.Text = "?";
-            this.button1.UseVisualStyleBackColor = true;
+            this.buttonProgramInfo.Enabled = false;
+            this.buttonProgramInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonProgramInfo.ForeColor = System.Drawing.Color.White;
+            this.buttonProgramInfo.Location = new System.Drawing.Point(337, 167);
+            this.buttonProgramInfo.Name = "buttonProgramInfo";
+            this.buttonProgramInfo.Size = new System.Drawing.Size(15, 21);
+            this.buttonProgramInfo.TabIndex = 34;
+            this.buttonProgramInfo.Text = "?";
+            this.buttonProgramInfo.UseVisualStyleBackColor = true;
+            this.buttonProgramInfo.Click += new System.EventHandler(this.buttonProgramInfo_Click);
+            // 
+            // linkLabelWeb
+            // 
+            this.linkLabelWeb.AutoSize = true;
+            this.linkLabelWeb.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.linkLabelWeb.Location = new System.Drawing.Point(342, 7);
+            this.linkLabelWeb.Name = "linkLabelWeb";
+            this.linkLabelWeb.Size = new System.Drawing.Size(46, 13);
+            this.linkLabelWeb.TabIndex = 6;
+            this.linkLabelWeb.TabStop = true;
+            this.linkLabelWeb.Text = "Website";
+            this.linkLabelWeb.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelWeb_LinkClicked);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.ClientSize = new System.Drawing.Size(498, 244);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(518, 244);
+            this.Controls.Add(this.buttonProgramInfo);
             this.Controls.Add(this.buttonLog);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -596,11 +622,10 @@
         private System.Windows.Forms.ComboBox comboBoxFirmware;
         private System.Windows.Forms.Button buttonSettings;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.ComboBox comboBoxProgram;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Label labelDisclaimer;
         private System.Windows.Forms.Timer timerDisclaimer;
-        private System.Windows.Forms.LinkLabel linkLabelWebsite;
+        private System.Windows.Forms.LinkLabel linkLabelGitHub;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel1;
@@ -619,6 +644,8 @@
         private System.Windows.Forms.Label labelHelp;
         public System.Windows.Forms.ComboBox comboBoxPorts;
         public System.Windows.Forms.ComboBox comboBoxControllerType;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonProgramInfo;
+        public System.Windows.Forms.ComboBox comboBoxProgram;
+        private System.Windows.Forms.LinkLabel linkLabelWeb;
     }
 }

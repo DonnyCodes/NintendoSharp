@@ -52,6 +52,9 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
     <Reference Include="SlimDX, Version=4.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9, processorArchitecture=x86">
       <HintPath>..\packages\SlimDX.4.0.13.44\lib\NET40\SlimDX.dll</HintPath>
     </Reference>
@@ -73,6 +76,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppController.cs" />
+    <Compile Include="BuiltIn\FPSMaster\FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BuiltIn\FPSMaster\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BuiltIn\FPSMaster\FPSMasterProg.cs" />
+    <Compile Include="BuiltIn\InputDisplay\FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BuiltIn\InputDisplay\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BuiltIn\InputDisplay\InputDisplay.cs" />
+    <Compile Include="BuiltIn\InputSender\GUIV2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BuiltIn\InputSender\GUIV2.Designer.cs">
+      <DependentUpon>GUIV2.cs</DependentUpon>
+    </Compile>
     <Compile Include="BuiltIn\InputSender\InputSenderGUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +168,21 @@
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="IO\VJoyController.cs" />
+    <Compile Include="UI\FormProgramInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormProgramInfo.Designer.cs">
+      <DependentUpon>FormProgramInfo.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="BuiltIn\FPSMaster\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BuiltIn\InputDisplay\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BuiltIn\InputSender\GUIV2.resx">
+      <DependentUpon>GUIV2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BuiltIn\InputSender\InputSenderGUI.resx">
       <DependentUpon>InputSenderGUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormProgramInfo.resx">
+      <DependentUpon>FormProgramInfo.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -76,9 +76,9 @@
             this.label2.ForeColor = System.Drawing.Color.Yellow;
             this.label2.Location = new System.Drawing.Point(12, 41);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(373, 16);
+            this.label2.Size = new System.Drawing.Size(368, 16);
             this.label2.TabIndex = 2;
-            this.label2.Text = "A Crash has occured and was Caught by the Handler.";
+            this.label2.Text = "A Crash has occured and was caught by the handler.";
             // 
             // label3
             // 

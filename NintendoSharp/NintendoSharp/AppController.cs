@@ -17,8 +17,7 @@ namespace NintendoSharp
 {
     public static class AppController
     {
-        public static string[] builtinPrograms = {"Input Recorder", "Input Converter"};
-        public static string version = "0.2.1";
+        public static string version = "0.2.3";
 
         public static FormMain mainForm;
         public static FormLog logForm;
@@ -30,6 +29,7 @@ namespace NintendoSharp
         public static volatile string logBuffer = "";
 
         public static UserScript loadedProgram;
+        public static List<UserScript> programs = new List<UserScript>();
 
         static System.Windows.Forms.Timer LogBufferTimer;
 
@@ -43,8 +43,20 @@ namespace NintendoSharp
             logForm.Show();
             mainForm.BringToFront();
             Log("Starting Up....", Enums.LogMessageType.Basic);
-            logForm.Location = new System.Drawing.Point(mainForm.Location.X, mainForm.Location.Y + mainForm.Height + 8);
             mainForm.labelVersion.Text = version;
+            logForm.Location = new System.Drawing.Point(mainForm.Location.X, mainForm.Location.Y + mainForm.Height + 8);
+            IO.InputController.Start();
+            programs.Add(new BuiltIn.InputSender.InputSender());
+            programs.Add(new BuiltIn.vJoyInterface.vJoy_Emu());
+            programs.Add(new BuiltIn.InputDisplay.InputDisplay());
+            programs.Add(new BuiltIn.FPSMaster.FPSMaster());
+            for (int i = 0; i < programs.Count; i += 1)
+            {
+                Log("Added program: " + programs[i].name + " | " + programs[i].versionID, Enums.LogMessageType.Basic);
+                programs[i].Load();
+                mainForm.comboBoxProgram.Items.Add(programs[i].name);
+            }
+            mainForm.comboBoxProgram.Items.Add("--Install a new Program--");
             if (!File.Exists(appFolder + "/" + "settings.js"))
             {
                 settings.ResetToDefaults();
@@ -132,7 +144,7 @@ namespace NintendoSharp
                     pingError = true;
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 pingError = true;
             }
@@ -148,10 +160,13 @@ namespace NintendoSharp
 
         public static void ShutDown()
         {
-            IO.VJoyController.enabled = false;
-            BuiltIn.vJoy_Emu.Stop();
+            IO.VJoyController.StopVjoyThread();
             IO.SerialController.StopSerial();
-            Application.Exit();
+            for (int i = 0; i < programs.Count; i += 1)
+            {
+                programs[i].Unload();
+            }
+            Environment.Exit(0);
         }
     }
 }

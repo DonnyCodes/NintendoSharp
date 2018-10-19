@@ -37,6 +37,7 @@ namespace NintendoSharp.NintendoSpyW.Readers
             }
         }
 
+
         public void Finish()
         {
             if (!disposedValue)

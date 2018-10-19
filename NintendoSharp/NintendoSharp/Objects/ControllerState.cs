@@ -71,10 +71,10 @@ namespace NintendoSharp.Objects
         {
             buttons1 = new BitArray(8, false);
             buttons2 = new BitArray(8, false);
-            stickXByte = 0;
-            stickYByte = 0;
-            cStickXByte = 0;
-            cStickYByte = 0;
+            stickXByte = 128;
+            stickYByte = 128;
+            cStickXByte = 128;
+            cStickYByte = 128;
             triggerByte1 = 0;
             triggerByte2 = 0;
         }
@@ -184,6 +184,78 @@ namespace NintendoSharp.Objects
             {
                 triggerByte2 = value;
             }
+        }
+
+        public string GetStateDifferences(ControllerState oldState)
+        {
+            string ret = "";
+
+            if (oldState.buttonShort != this.buttonShort)
+            {
+                if (oldState.buttonByte1 == this.buttonByte1)
+                {
+                    ret += "<1" + this.buttonByte2.ToString() + ">";
+
+                }
+                else if (oldState.buttonByte2 == this.buttonByte2)
+                {
+                    ret += "<0" + this.buttonByte1.ToString() + ">";
+                }
+                else
+                {
+                    ret += "<b" + this.buttonShort.ToString() + ">";
+                }
+            }
+
+            if (oldState.stickShort != this.stickShort)
+            {
+                if (oldState.stickXByte == this.stickXByte)
+                {
+                    ret += "<3" + this.stickYByte.ToString() + ">";
+                }
+                else if (oldState.stickYByte == this.stickYByte)
+                {
+                    ret += "<2" + this.stickXByte.ToString() + ">";
+                }
+                else
+                {
+                    ret += "<s" + this.stickShort.ToString() + ">";
+                }
+            }
+
+            if (oldState.cStickShort != this.cStickShort)
+            {
+                if (oldState.cStickXByte == this.cStickXByte)
+                {
+                    ret += "<5" + this.cStickYByte.ToString() + ">";
+                }
+                else if (oldState.cStickYByte == this.cStickYByte)
+                {
+                    ret += "<4" + this.cStickXByte.ToString() + ">";
+                }
+                else
+                {
+                    ret += "<c" + this.cStickShort.ToString() + ">";
+                }
+            }
+
+            if (oldState.triggerShort != this.triggerShort)
+            {
+                if (oldState.triggerByte1 == this.triggerByte1)
+                {
+                    ret += "<7" + this.triggerByte2.ToString() + ">";
+                }
+                else if (oldState.triggerByte2 == this.triggerByte2)
+                {
+                    ret += "<6" + this.triggerByte1.ToString() + ">";
+                }
+                else
+                {
+                    ret += "<t" + this.triggerShort.ToString() + ">";
+                }
+            }
+
+            return ret;
         }
     }
 }

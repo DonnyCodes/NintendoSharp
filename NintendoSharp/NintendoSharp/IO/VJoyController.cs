@@ -20,6 +20,7 @@ namespace NintendoSharp.IO
         {
             outputQueue = Queue.Synchronized(new Queue());
             vJoyThread = new Thread(vJoyLoop);
+            vJoyThread.IsBackground = true;
             vJoyThread.Start();
             AppController.Log("vJoy Thread Started.", Constants.Enums.LogMessageType.Basic);
         }
@@ -35,7 +36,7 @@ namespace NintendoSharp.IO
                 }
                 catch (Exception exc)
                 {
-
+                    new UI.CrashHandler(exc).Show();
                 }
             }
         }
@@ -184,8 +185,11 @@ namespace NintendoSharp.IO
                     AppController.logBuffer += "vJoy: " + axiHIDs[i].ToString() + " Axis Max: " + vJoyAxismax[i].ToString() + Environment.NewLine;
                 }
             }
-            BuiltIn.vJoy_Emu.newMaxes = vJoyAxismax;
-            BuiltIn.vJoy_Emu.maxesUpdateQueued = true;
+            if (AppController.loadedProgram.name.StartsWith("vJoy"))
+            {
+                ((BuiltIn.vJoyInterface.vJoy_Emu)AppController.loadedProgram).newMaxes = vJoyAxismax;
+                ((BuiltIn.vJoyInterface.vJoy_Emu)AppController.loadedProgram).maxesUpdateQueued = true;
+            }
 
             AppController.logBuffer += "vJoy: Running....";
             while (enabled) //loop driver

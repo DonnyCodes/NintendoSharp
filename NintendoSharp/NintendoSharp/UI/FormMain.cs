@@ -12,6 +12,8 @@ using System.IO.Ports;
 namespace NintendoSharp.UI
 {
     public partial class FormMain : Form {
+        FormProgramInfo programInfoForm = new FormProgramInfo();
+        bool appRunning = false;
         public FormMain()
         {
             InitializeComponent();
@@ -162,16 +164,7 @@ namespace NintendoSharp.UI
 
         private void buttonProgramGUI_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Just Press \"Start\" and use the \"vjoy\" input in your game/emulator.");
-            string programName = this.comboBoxProgram.GetItemText(this.comboBoxProgram.SelectedItem);
-            if (programName.StartsWith("vJoy"))
-            {
-                BuiltIn.vJoy_Emu.OnGUI();
-            }
-            else
-            {
-                //BuiltIn.InputSender.InputSender_Prog.GUI();
-            }
+            AppController.loadedProgram.GUI();
         }
 
         private void buttonProgramStart_Click(object sender, EventArgs e)
@@ -182,33 +175,18 @@ namespace NintendoSharp.UI
             }
             SaveToSettings();
             AppController.SaveSettings();
-            buttonProgramStart.Enabled = false;
             labelAppStatus.ForeColor = Color.Yellow;
             labelAppStatus.Text = "Starting Program....";
-            StartProgram(this.comboBoxProgram.GetItemText(this.comboBoxProgram.SelectedItem));
-        }
-
-        void StartProgram(string programName)
-        {
-            if (programName.StartsWith("vJoy"))
+            appRunning = !appRunning;
+            if (appRunning)
             {
-                labelAppStatus.ForeColor = Color.LightGreen;
-                BuiltIn.vJoy_Emu.Start();
-                labelAppStatus.Text = "Re-direcing Nintendospy to vJoy. Don't close this app!";
-            }
-            else if (programName.StartsWith("Install"))
-            {
-                MessageBox.Show("Script Installer Coming Soon");
-                labelAppStatus.ForeColor = Color.LightGreen;
-                buttonProgramStart.Enabled = true;
-                labelAppStatus.Text = "Choose a program!";
+                AppController.loadedProgram.Start();
+                buttonProgramStart.Text = "Stop";
             }
             else
             {
-                MessageBox.Show("Choose a program!");
-                labelAppStatus.ForeColor = Color.LightGreen;
-                buttonProgramStart.Enabled = true;
-                labelAppStatus.Text = "Choose a program!";
+                AppController.loadedProgram.Stop();
+                buttonProgramStart.Text = "Start";
             }
         }
 
@@ -247,7 +225,7 @@ namespace NintendoSharp.UI
             }
             catch (Exception exc)
             {
-
+                new UI.CrashHandler(exc).Show();
             }
         }
 
@@ -265,7 +243,7 @@ namespace NintendoSharp.UI
             }
             catch(Exception exc)
             {
-                
+                new UI.CrashHandler(exc).Show();
             }
         }
 
@@ -326,11 +304,16 @@ namespace NintendoSharp.UI
             if (comboBoxProgram.SelectedIndex == comboBoxProgram.Items.Count - 1)
             {
                 MessageBox.Show("Coming Soon.");
+                comboBoxProgram.SelectedIndex = 0;
             }
             else
             {
+                AppController.loadedProgram = AppController.programs[comboBoxProgram.SelectedIndex];
+                AppController.Log("Changed program to: " + AppController.loadedProgram.name + " | " + AppController.loadedProgram.versionID, Enums.LogMessageType.Basic);
                 buttonProgramGUI.Enabled = true;
                 buttonProgramStart.Enabled = true;
+                buttonProgramInfo.Enabled = true;
+                programInfoForm.FillFromProgram(AppController.loadedProgram);
             }
         }
 
@@ -400,6 +383,22 @@ namespace NintendoSharp.UI
         private void panelTop_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void buttonProgramInfo_Click(object sender, EventArgs e)
+        {
+            programInfoForm.Show();
+            programInfoForm.BringToFront();
+        }
+
+        private void labelTitle_MouseMove(object sender, MouseEventArgs e)
+        {
+            panelTop_MouseMove(sender, e);
+        }
+
+        private void linkLabelWeb_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://nintendosharp.bobwillneverdie.com");
         }
     }
 }

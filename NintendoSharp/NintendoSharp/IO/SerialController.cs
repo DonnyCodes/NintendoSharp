@@ -10,24 +10,27 @@ namespace NintendoSharp.IO
 {
     public static class SerialController
     {
-        public static Thread serialThread = new Thread(LoopSerial);
-        public static Queue outputQueue = Queue.Synchronized(new Queue()); //to board
-        public static Queue inputQueue = Queue.Synchronized(new Queue()); //from board
+        public static Thread serialThread;
         public static volatile string portNameNew = "COM4";
-        static volatile bool portFlushQueued = false;
-        static volatile bool portCloseQueued = false;
         public static volatile bool portOpen = false;
         public static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
         public static void StartSerial()
         {
+            serialThread = new Thread(LoopSerial);
+            serialThread.IsBackground = true;
+            if (portOpen)
+            {
+                AppController.Log("Error: Serial already running.", Constants.Enums.LogMessageType.Error);
+                return;
+            }
             AppController.Log("Starting Serial port on " + portNameNew + " ....", Constants.Enums.LogMessageType.Basic);
             serialThread.Start();
         }
 
         public static void StopSerial()
         {
-            portCloseQueued = true;
+            portOpen = false;
         }
 
         static void LoopSerial()
@@ -37,38 +40,26 @@ namespace NintendoSharp.IO
             port.BaudRate = 500000;
             port.Open();
             portOpen = true;
-            portFlushQueued = true;
             AppController.logBuffer += "Serial Port Opened." + Environment.NewLine;
-            while (port.IsOpen)
+            while (portOpen && port.IsOpen)
             {
-
+                if (OutputController.queue.Count > 0)
+                {
+                    string send = (string)OutputController.queue.Dequeue();
+                    port.Write(send);
+                    AppController.logBuffer += "Serial OUT: " + send + Environment.NewLine;
+                }
+                if (port.BytesToRead > 0)
+                {
+                    InputController.AddFromSerial((char)port.ReadChar());
+                }
             }
             portOpen = false;
-            AppController.logBuffer += "Serial Port Closed." + Environment.NewLine;
-        }
-
-        static char[] ReadFromArduino(SerialPort port)
-        {
-            return new char[1];
-        }
-
-        static void WriteToArduino(SerialPort port, char[] message)
-        {
-
-        }
-
-        public static void SendToQueue(char[] command)
-        {
-            outputQueue.Enqueue(command);
-        }
-
-        private static char[] ReadFromQueue()
-        {
-            if (inputQueue.Count == 0)
+            if (port.IsOpen)
             {
-                return null;
+                port.Close();
             }
-            return (char[])inputQueue.Dequeue();
+            AppController.logBuffer += "Serial Port Closed." + Environment.NewLine;
         }
     }
 }

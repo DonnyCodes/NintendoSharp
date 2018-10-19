@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -8,92 +8,73 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NintendoSharp.Constants;
+using NintendoSharp.Objects;
+using NintendoSharp.IO;
 
 namespace NintendoSharp.BuiltIn.InputSender
 {
-    public partial class InputSenderSendForm : Form
+    public partial class GUIV2 : Form
     {
-        int[] bytes = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        public ControllerState state = new ControllerState();
+        public ControllerState lastState = new ControllerState();
 
-        int[] shorts = { 0, 0, 0, 0 };
-
-        byte stickX = 128;
-        byte stickY = 128;
-        byte cStickX = 128;
-        byte cStickY = 128;
-        byte triggL = 0;
-        byte triggR = 0;
-
-        BitArray buttons1 = new BitArray(8,false);
+        BitArray buttons1 = new BitArray(8, false);
         BitArray buttons2 = new BitArray(8, false);
 
-        public InputSenderSendForm()
+        public GUIV2()
         {
             InitializeComponent();
         }
 
-        private void InputSenderSendForm_Load(object sender, EventArgs e)
-        {
-            UpdateDisplays();
-        }
-
-        int BoolToInt(bool newBool)
-        {
-            if (newBool)
-            {
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        byte ConvertToByte(BitArray bits)
-        {
-            if (bits.Count != 8)
-            {
-                throw new ArgumentException("bits");
-            }
-            byte[] bytes = new byte[1];
-            bits.CopyTo(bytes, 0);
-            return bytes[0];
-        }
-
-        public void UpdateDisplays()
-        {
-            numericUpDown1.Value = (decimal)ConvertToByte(buttons1);
-            numericUpDown2.Value = (decimal)ConvertToByte(buttons2);
-            numericUpDown9.Value = (decimal)shorts[0];
-            numericUpDown10.Value = (decimal)shorts[1];
-            numericUpDown11.Value = (decimal)shorts[2];
-            numericUpDown12.Value = (decimal)shorts[3];
-        }
-
-        private void button1_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void button1_MouseUp(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        private void panel3_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-
+                WinImports.ReleaseCapture();
+                WinImports.SendMessage(Handle, WinImports.WM_NCLBUTTONDOWN, WinImports.HT_CAPTION, 0);
             }
         }
 
-        private void pictureBox2_MouseMove(object sender, MouseEventArgs e)
+        private void labelClose_Click(object sender, EventArgs e)
         {
+            this.Hide();
+        }
+
+        private void labelMinimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void GUIV2_Load(object sender, EventArgs e)
+        {
+            UpdateForm();
+        }
+
+        private void UpdateForm()
+        {
+            pictureBoxStick.Location = new Point(state.stickXByte - 8, state.stickYByte - 8);
+            pictureBoxCStick.Location = new Point(state.cStickXByte - 8, state.cStickYByte - 8);
+
+            numericUpDownB1.Value = state.buttonByte1;
+            numericUpDownB2.Value = state.buttonByte2;
+            numericUpDownSX.Value = state.stickXByte;
+            numericUpDownSY.Value = state.stickYByte;
+            numericUpDownCX.Value = state.cStickXByte;
+            numericUpDownCY.Value = state.cStickYByte;
+            numericUpDownTX.Value = state.triggerByte1;
+            numericUpDownTY.Value = state.triggerByte2;
+
+            numericUpDownBShort.Value = state.buttonShort;
+            numericUpDownSShort.Value = state.stickShort;
+            numericUpDownCShort.Value = state.cStickShort;
+            numericUpDownTShort.Value = state.triggerShort;
+
+            textBoxSerialSend.Text = state.GetStateDifferences(lastState);
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonA_Click(object sender, EventArgs e)
         {
             string txt = (sender as Button).Text;
             if (txt == "A")
@@ -107,6 +88,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.A, buttons1[0]);
             }
             else if (txt == "B")
             {
@@ -119,6 +101,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.B, buttons1[1]);
             }
             else if (txt == "X")
             {
@@ -131,6 +114,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.X, buttons1[2]);
             }
             else if (txt == "Y")
             {
@@ -143,6 +127,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.Y, buttons1[3]);
             }
             else if (txt == "Z")
             {
@@ -155,6 +140,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.Z, buttons1[4]);
             }
             else if (txt == "S")
             {
@@ -167,6 +153,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.S, buttons1[5]);
             }
             else if (txt == "L")
             {
@@ -179,6 +166,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.L, buttons1[6]);
             }
             else if (txt == "R")
             {
@@ -191,6 +179,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.R, buttons1[7]);
             }
             else if (txt == "D-U")
             {
@@ -203,6 +192,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.DU, buttons2[0]);
             }
             else if (txt == "D-L")
             {
@@ -215,6 +205,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.DL, buttons2[1]);
             }
             else if (txt == "D-D")
             {
@@ -227,6 +218,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.DD, buttons2[2]);
             }
             else if (txt == "D-R")
             {
@@ -239,6 +231,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.DR, buttons2[3]);
             }
             else if (txt == "C-U")
             {
@@ -251,6 +244,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.CU, buttons2[4]);
             }
             else if (txt == "C-L")
             {
@@ -263,6 +257,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.CL, buttons2[5]);
             }
             else if (txt == "C-D")
             {
@@ -275,6 +270,7 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.CD, buttons2[6]);
             }
             else if (txt == "C-R")
             {
@@ -287,12 +283,66 @@ namespace NintendoSharp.BuiltIn.InputSender
                 {
                     (sender as Button).BackColor = Color.LightCoral;
                 }
+                state.UpdateButton(Enums.Button.CR, buttons2[7]);
             }
-            shorts[0] = (ushort)(ConvertToByte(buttons1) + (ConvertToByte(buttons2) << 8));
-            shorts[1] = (ushort)(stickX + (stickY << 8));
-            shorts[2] = (ushort)(cStickX + (cStickY << 8));
-            shorts[3] = (ushort)(triggL + (triggR << 8));
-            UpdateDisplays();
+
+            UpdateForm();
+        }
+
+        private void trackBarT1_Scroll(object sender, EventArgs e)
+        {
+            state.UpdateAxis(Enums.Axis.trigL, (byte)numericUpDownTX.Value);
+            UpdateForm();
+        }
+
+        private void trackBarT2_Scroll(object sender, EventArgs e)
+        {
+            state.UpdateAxis(Enums.Axis.trigR, (byte)numericUpDownTY.Value);
+            UpdateForm();
+        }
+
+        private void trackBarX_Scroll(object sender, EventArgs e)
+        {
+            state.UpdateAxis(Enums.Axis.X, (byte)numericUpDownSX.Value);
+            UpdateForm();
+        }
+
+        private void trackBarY_Scroll(object sender, EventArgs e)
+        {
+            state.UpdateAxis(Enums.Axis.Y, (byte)numericUpDownSY.Value);
+            UpdateForm();
+        }
+
+        private void trackBarCX_Scroll(object sender, EventArgs e)
+        {
+            state.UpdateAxis(Enums.Axis.cX, (byte)numericUpDownCX.Value);
+            UpdateForm();
+        }
+
+        private void trackBarCY_Scroll(object sender, EventArgs e)
+        {
+            state.UpdateAxis(Enums.Axis.cY, (byte)numericUpDownCY.Value);
+            UpdateForm();
+        }
+
+        private void buttonSend_Click(object sender, EventArgs e)
+        {
+            if (!SerialController.portOpen)
+            {
+                MessageBox.Show("Press \"start\" first!");
+                return;
+            }
+            OutputController.SendStateToSerial(state);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OutputController.queue.Enqueue("<o>");
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OutputController.queue.Enqueue("<m" + numericUpDownMode.Value.ToString() + ">");
         }
     }
 }

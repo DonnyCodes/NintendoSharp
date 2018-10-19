@@ -13,6 +13,7 @@ namespace NintendoSharp.BuiltIn
 {
     public partial class vJoyEmuGUI : Form
     {
+        public vJoyInterface.vJoy_Emu parent;
         public vJoyEmuGUI()
         {
             InitializeComponent();
@@ -20,19 +21,19 @@ namespace NintendoSharp.BuiltIn
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            vJoy_Emu.newAnalogMods[0] = (double)numericUpDownModX.Value;
-            vJoy_Emu.newAnalogMods[1] = (double)numericUpDownModY.Value;
-            vJoy_Emu.newAnalogMods[2] = (double)numericUpDownModZ.Value;
-            vJoy_Emu.newAnalogMods[3] = (double)numericUpDownModRX.Value;
-            vJoy_Emu.newAnalogMods[4] = (double)numericUpDownModRY.Value;
-            vJoy_Emu.newAnalogMods[5] = (double)numericUpDownModRZ.Value;
-            vJoy_Emu.newDeadzones[0] = (int)numericUpDownDzX.Value;
-            vJoy_Emu.newDeadzones[1] = (int)numericUpDownDzY.Value;
-            vJoy_Emu.newDeadzones[2] = (int)numericUpDownDzZ.Value;
-            vJoy_Emu.newDeadzones[3] = (int)numericUpDownDzRx.Value;
-            vJoy_Emu.newDeadzones[4] = (int)numericUpDownDzRy.Value;
-            vJoy_Emu.newDeadzones[5] = (int)numericUpDownDzRz.Value;
-            vJoy_Emu.deviceSettingsUpdateQueued = true;
+            parent.newAnalogMods[0] = (double)numericUpDownModX.Value;
+            parent.newAnalogMods[1] = (double)numericUpDownModY.Value;
+            parent.newAnalogMods[2] = (double)numericUpDownModZ.Value;
+            parent.newAnalogMods[3] = (double)numericUpDownModRX.Value;
+            parent.newAnalogMods[4] = (double)numericUpDownModRY.Value;
+            parent.newAnalogMods[5] = (double)numericUpDownModRZ.Value;
+            parent.newDeadzones[0] = (int)numericUpDownDzX.Value;
+            parent.newDeadzones[1] = (int)numericUpDownDzY.Value;
+            parent.newDeadzones[2] = (int)numericUpDownDzZ.Value;
+            parent.newDeadzones[3] = (int)numericUpDownDzRx.Value;
+            parent.newDeadzones[4] = (int)numericUpDownDzRy.Value;
+            parent.newDeadzones[5] = (int)numericUpDownDzRz.Value;
+            parent.deviceSettingsUpdateQueued = true;
             AppController.settings.vJoyModX = (double)numericUpDownModX.Value;
             AppController.settings.vJoyModY = (double)numericUpDownModY.Value;
             AppController.settings.vJoyModZ = (double)numericUpDownModZ.Value;
@@ -127,7 +128,7 @@ namespace NintendoSharp.BuiltIn
 
         private void vJoyEmuGUI_Load(object sender, EventArgs e)
         {
-            comboBoxMappingInfo.SelectedIndex = 2;
+
         }
     }
 }
